@@ -1,10 +1,15 @@
 ## 📝 Sobre o exercício
 <p align="justify"> 
   Neste problema, também escrevi um arquivo .l e, com a ferramenta Flex, gerei um analisador léxico que aceita as cadeias geradas pelas expressões regulares a seguir, as quais estão apresentadas em ordem de prioridade(da maior para a menor):
-&nbsp;(aba)+ (action1)
-&nbsp;(a(b∗)a) (action2)
-&nbsp;(a|b) (action3)
+  <br/><br/>
+<pre>
+&nbsp;(aba)+      (action1)<br/>
+&nbsp;(a(b∗)a)    (action2)<br/>
+&nbsp;(a|b)       (action3)
+</pre><br/>
 </p>
+
+
 
 <p align="justify"> 
     O programa lê a partir da entrada padrão e imprime um token por linha, chegando ao fim ao encontrar o símbolo de fim de arquivo. Para caracteres que não façam parte do alfabeto, o programa imprime a mensagem 'error'. Quebras de linha que não estão associadas ao token 'comment' são ignoradas.</br></br>
