@@ -11,6 +11,7 @@
 
 
   Exemplo de entrada:
+  
       identificador 900abobrinha@--comentario
       0.0
 
