@@ -12,8 +12,8 @@
 
   Exemplo de entrada:
     
-    +-abcabc@ abc
-    fgh
+      +-abcabc@ abc
+      fgh
 
 </p>   
 <p>
