@@ -146,7 +146,7 @@ IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 {IDENTIFIER}                                { update_position(yytext); printf("IDENTIFIER(%s)\n", yytext);}
 \n                                          { line_num++; column_num = 0; }
 {WHITESPACE}                                { column_num++;}
-{CHARACTER}                                 { update_position(yytext); 	printf("CHARACTER(%s)\n", yytext);}
+{CHARACTER}                                 { update_position(yytext); 	printf("CHARACTER(%c)\n", yytext[3]);}
 .                                           { update_position(yytext); printf("error:lexical:%d:%d: %s\n", line_num, column_num, yytext); }
 
 %%
