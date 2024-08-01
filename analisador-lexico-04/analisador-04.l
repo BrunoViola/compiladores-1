@@ -143,7 +143,7 @@ IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 {NUM_OCTAL}                                 { update_position(yytext); printf("NUM_OCTAL(%s)\n", yytext);}
 {NUM_INTEGER}                               { update_position(yytext); printf("NUM_INTEGER(%s)\n", yytext);}
 {NUM_HEXA}                                  { update_position(yytext); printf("NUM_HEXA(%s)\n", yytext);}
-{IDENTIFIER}                                { update_position(yytext); printf("IDENTIFIER(%s)\n", yytext);}
+{IDENTIFIER}                                { int init_col = get_initial_position(yytext); update_position(yytext); if(column_num<=255){ printf("IDENTIFIER(%s)\n", yytext);} else{  printf("error:lexical:%d:%d: identifier too long\n", line_num, init_col);} }
 \n                                          { line_num++; column_num = 0; }
 {WHITESPACE}                                { column_num++;}
 {CHARACTER}                                 { update_position(yytext); 	printf("CHARACTER(%c)\n", yytext[3]);}
