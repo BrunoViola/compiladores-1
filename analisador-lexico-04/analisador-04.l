@@ -153,7 +153,14 @@ IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 
 void update_position(const char *text) {
     int len = strlen(text);
-    column_num += len;
+    for (int i = 0; i < len; i++) {
+        if (text[i] == '\n') {
+            line_num++;
+            column_num = 0;
+        } else {
+            column_num++;
+        }
+    }
 }
 
 int get_initial_position(const char *text) {
