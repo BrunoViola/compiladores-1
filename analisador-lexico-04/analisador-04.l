@@ -8,6 +8,7 @@ int column_num = 0;
 void update_position(const char *text);
 int get_initial_position(const char *text);
 void print_string_token(const char *text);
+void verify_warning(const char * text);
 
 
 %}
@@ -116,7 +117,7 @@ IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 {EXIT}                                      { update_position(yytext); printf("EXIT\n");}
 {STRING}                                    { update_position(yytext); print_string_token(yytext); }
 {TERMINATED_COMMENT}                        { update_position(yytext);}
-{COMENTARIO_EM_BLOCO}                       { update_position(yytext);}
+{COMENTARIO_EM_BLOCO}                       { verify_warning(yytext); update_position(yytext);}
 {UNTERMINATED_COMMENT}                      { int init_col = get_initial_position(yytext); printf("error:lexical:%d:%d: unterminated comment\n", line_num, init_col); update_position(yytext);}
 {PLUS}                                      { update_position(yytext); printf("PLUS\n");}
 {MINUS}                                     { update_position(yytext); printf("MINUS\n");}
@@ -153,15 +154,17 @@ IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 
 void update_position(const char *text) {
     int len = strlen(text);
-    for (int i = 0; i < len; i++) {
-        if (text[i] == '\n') {
+    for(int i=0; i<len; i++) {
+        if(text[i] == '\n') {
             line_num++;
             column_num = 0;
-        } else {
+        }else {
             column_num++;
         }
     }
 }
+
+
 
 int get_initial_position(const char *text) {
     return column_num + 1;
@@ -173,6 +176,26 @@ void print_string_token(const char *text) {
     strncpy(buffer, text + 1, strlen(text) - 2);
     buffer[strlen(text) - 2] = '\0';
     printf("STRING(%s)\n", buffer);
+}
+
+void verify_warning(const char * text){
+    int len = strlen(text);
+    int count = 0;
+    int colum=0;
+    int line = line_num;
+    for(int i=0; i<len; i++){
+        colum++;
+        if(text[i]=='\n'){
+            colum = 0;
+            line++;
+        }
+        if(text[i]=='/' && text[i+1]=='*'){
+            count++;
+            colum++;
+            i++;
+            if(count>1) printf("warning:%d:%d: ’/*’ within block comment\n", line, colum);
+        }
+    }
 }
 
 int yywrap() {
