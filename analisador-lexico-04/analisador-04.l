@@ -49,8 +49,8 @@ EXIT                    exit
 STRING                  \"([^\\"]|\\.)*\"
 WHITESPACE              " "
 TERMINATED_COMMENT      "//"(.)*
-COMENTARIO_EM_BLOCO     "/*"(.|"\n")*"*/"
-UNTERMINATED_COMMENT    "/*"(.|"\n")*
+COMENTARIO_EM_BLOCO     "/*"(.|\n)*?"*/"
+UNTERMINATED_COMMENT    "/*"([^*]|\*+[^/*])*
 PLUS                    "+"
 MINUS                   "-"
 INC                     "++"
