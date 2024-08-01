@@ -7,6 +7,8 @@ int column_num = 0;
 
 void update_position(const char *text);
 int get_initial_position(const char *text);
+void print_string_token(const char *text);
+
 
 %}
 
@@ -60,7 +62,7 @@ IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 {NUMBER_SIGN}                               { update_position(yytext); printf("NUMBER_SIGN\n");}
 {POINTER}                                   { update_position(yytext); printf("POINTER\n");}
 {PRINTF}                                    { update_position(yytext); printf("PRINTF\n");}
-{STRING}                                    { update_position(yytext); printf("STRING(%s)\n", yytext);}
+{STRING}                                    { update_position(yytext); print_string_token(yytext); }
 {TERMINATED_COMMENT}                        { update_position(yytext);}
 {COMENTARIO_EM_BLOCO}                       { update_position(yytext);}
 {UNTERMINATED_COMMENT}                      { int init_col = get_initial_position(yytext); printf("error:lexical:%d:%d: unterminated comment\n", line_num, init_col); update_position(yytext);}
@@ -91,6 +93,14 @@ void update_position(const char *text) {
 
 int get_initial_position(const char *text) {
     return column_num + 1;
+}
+
+void print_string_token(const char *text) {
+    // Remover as aspas duplas iniciais e finais
+    char buffer[strlen(text) - 1];
+    strncpy(buffer, text + 1, strlen(text) - 2);
+    buffer[strlen(text) - 2] = '\0';
+    printf("STRING(%s)\n", buffer);
 }
 
 int yywrap() {
