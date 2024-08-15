@@ -1,0 +1,17 @@
+int main(){
+   int a, b;
+   a = 1;
+
+   printf("Essa eh apenas uma entrada-exemplo");
+   /*comentario em bloco*/
+
+   if(a){
+      a = 0;
+   }else{
+      a = 1;
+   }
+
+   a = b;
+
+   return 0;
+}
