@@ -1,3 +1,4 @@
+%option noyywrap
 %{
 #include <stdio.h>
 #include <string.h>
@@ -51,7 +52,7 @@ EXIT                    exit
 STRING                  \"([^\\"]|\\.)*\"
 WHITESPACE              " "
 TERMINATED_COMMENT      "//"(.)*
-COMENTARIO_EM_BLOCO     "/*"(.|\n)*?"*/"
+COMENTARIO_EM_BLOCO     "/*"([^*]|\*+[^*/])*"*/"
 UNTERMINATED_COMMENT    "/*"([^*]|\*+[^/*])*
 PLUS                    "+"
 MINUS                   "-"
@@ -78,7 +79,8 @@ MINUS_ASSIGN            "-="
 NUM_OCTAL               0[1-7][0-7]*
 NUM_INTEGER             [0-9]+
 NUM_HEXA                0(x|X)[a-zA-Z0-9]+
-CHARACTER               "\’"[^\n]"\’"
+CHARACTER               "\'"[^\n]"\'"
+BARRAINVERTIDA          "\'""\\"[abfnrtv\\'"?0]"\'"
 IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 
 %%
@@ -145,10 +147,11 @@ IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 {NUM_OCTAL}                                 { update_position(yytext);print_quebra(); printf("NUM_OCTAL(%s)", yytext);}
 {NUM_INTEGER}                               { update_position(yytext);print_quebra(); printf("NUM_INTEGER(%s)", yytext);}
 {NUM_HEXA}                                  { update_position(yytext);print_quebra(); printf("NUM_HEXA(%s)", yytext);}
-{IDENTIFIER}                                { int init_col = get_initial_position(yytext); update_position(yytext);print_quebra(); if(column_num<=255){ printf("IDENTIFIER(%s)", yytext);} else{  printf("error:lexical:%d:%d: identifier too long\n", line_num, init_col);} }
+{IDENTIFIER}                                { int init_col = get_initial_position(yytext); update_position(yytext);print_quebra(); if(column_num<=255){ printf("IDENTIFIER(%s)", yytext);} else{  printf("error:lexical:%d:%d: identifier too long", line_num, init_col);} }
 \n                                          { line_num++; column_num = 0; }
 {WHITESPACE}                                { column_num++;}
-{CHARACTER}                                 { update_position(yytext);print_quebra(); 	printf("CHARACTER(%c)", yytext[3]);}
+{CHARACTER}                                 { update_position(yytext);print_quebra(); 	printf("CHARACTER(%c)", yytext[1]);}
+{BARRAINVERTIDA}                            {update_position(yytext); print_quebra(); printf("CHARACTER(%c%c)", yytext[1], yytext[2]);}
 .                                           { update_position(yytext);print_quebra(); printf("error:lexical:%d:%d: %s", line_num, column_num, yytext); }
 
 %%
@@ -165,14 +168,11 @@ void update_position(const char *text) {
     }
 }
 
-
-
 int get_initial_position(const char *text) {
     return column_num + 1;
 }
 
 void print_string_token(const char *text) {
-    // Remover as aspas duplas iniciais e finais
     char buffer[strlen(text) - 1];
     strncpy(buffer, text + 1, strlen(text) - 2);
     buffer[strlen(text) - 2] = '\0';
@@ -190,13 +190,18 @@ void verify_warning(const char * text){
             colum = 0;
             line++;
         }
-        if(text[i]=='/' && text[i+1]=='*'){
+        if(text[i]=='/' && text[i+1]=='*' && text[i+2]=='/'){
+            count--;
+        }else if(text[i-1]!='/' && text[i]=='/' && text[i+1]=='*'){
             count++;
-            colum++;
             i++;
-            if(count>1) printf("warning:%d:%d: ’/*’ within block comment\n", line, colum);
+            if(count>1) printf("\nwarning:%d:%d: '/*' within block comment", line, colum);
+            colum++;
+        } else if(text[i]=='*' && text[i+1]=='/'){
+            count--;
         }
     }
+    count=0;
 }
 
 void print_quebra(){
@@ -205,10 +210,6 @@ void print_quebra(){
     }else{
         first = 0;
     }
-}
-
-int yywrap() {
-    return 1;
 }
 
 int main(void) {
