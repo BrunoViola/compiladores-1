@@ -7,6 +7,7 @@ int main(){
    char c;
    int length = 0;  // Inicializa length como 0, pois a string começa vazia
    int i = 0, posicao=0, vetor[100];
+   int eh_num = 1;
 
    while(fscanf(stdin, "%c", &c) != EOF) {
       string = realloc(string, length + 1 + 1); // realoca espaço para o novo caractere + '\0'
@@ -57,11 +58,20 @@ int main(){
          printf("SEMI\n");
          vetor[posicao] = 7;
       }else if((aux[i]=='+' || aux[i]=='-' || (aux[i]>=48 && aux[i]<=57))){ //reconhece NUM
+         if(aux[i] == '+' || aux[i] == '-') {
+            i++; // avança para o proximo caractere
+            eh_num = 0; //evita que + ou - sejam reconhecidos como NUM
+         }
          while(aux[i]>=48 && aux[i]<=57){
             i++;
+            eh_num = 1; //confirma que estamos trantando de um numero
          }i--;
-         printf("NUM\n");
-         vetor[posicao] = 8;
+         if(eh_num){ 
+            printf("NUM\n");
+            vetor[posicao] = 8;
+         }else{
+            printf("ERRO\n");
+         }
       }else if(aux[i]=='='){ //reconhece EQ
          printf("EQ\n");
          vetor[posicao] = 9;
