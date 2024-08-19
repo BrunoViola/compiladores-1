@@ -68,7 +68,8 @@ void S(int *vetor){
    case PRINT: eat(PRINT, vetor); E(vetor); break;
    
    default:
-      if(!erro_sintatico) printf("ERRO SINTATICO EM: %s ESPERADO: if, begin, print", tokenTypeToString(vetor[token_posicao]));
+      if(token_posicao>tamanho_maximo_tokens) printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+      else if(!erro_sintatico) printf("ERRO SINTATICO EM: %s ESPERADO: if, begin, print", tokenTypeToString(vetor[token_posicao]));
       erro_sintatico = 1;
       return;
       break;
@@ -86,9 +87,10 @@ void L(int *vetor){
    {
    case END: eat(END, vetor); break;
    case SEMI: eat(SEMI, vetor); S(vetor); L(vetor); break;
-  
+    
    default:
-      if(!erro_sintatico) printf("ERRO SINTATICO EM: %s ESPERADO: end, ;", tokenTypeToString(vetor[token_posicao]));
+      if(token_posicao>tamanho_maximo_tokens) printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+      else if(!erro_sintatico) printf("ERRO SINTATICO EM: %s ESPERADO: end, ;", tokenTypeToString(vetor[token_posicao]));
       erro_sintatico = 1;
       break;
    }
@@ -101,7 +103,8 @@ void E(int *vetor){
    case NUM:
       eat(NUM, vetor); eat(EQ, vetor); eat(NUM, vetor); break;
    default:
-      if(!erro_sintatico) printf("ERRO SINTATICO EM: %s ESPERADO: num", tokenTypeToString(vetor[token_posicao]));
+      if(token_posicao>tamanho_maximo_tokens) printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+      else if(!erro_sintatico) printf("ERRO SINTATICO EM: %s ESPERADO: num", tokenTypeToString(vetor[token_posicao]));
       erro_sintatico = 1;
       break;
    }
@@ -135,37 +138,37 @@ int main(){
 
    while(aux[i] != '\0') {
       if(aux[i]=='i' && aux[i+1] == 'f'){ //reconhece o IF
-         printf("IF\n");
+         //printf("IF\n");
          vetor[posicao] = 1;
          posicao++;
          i+=1;
       }else if(aux[i]=='t' && aux[i+1]=='h' && aux[i+2]=='e' && aux[i+3]=='n'){ //reconhece THEN
-         printf("THEN\n");
+        // printf("THEN\n");
          vetor[posicao] = 2;
          posicao++;
          i+=3;
       }else if(aux[i]=='e' && aux[i+1]=='l' && aux[i+2]=='s' && aux[i+3]=='e'){ //reconhece ELSE
-         printf("ELSE\n");
+         //printf("ELSE\n");
          vetor[posicao] = 3;
          posicao++;
          i+=3;
       }else if(aux[i]=='b' && aux[i+1]=='e' && aux[i+2]=='g' && aux[i+3]=='i' && aux[i+4]=='n'){ //reconhece BEGIN
-         printf("BEGIN\n");
+         //printf("BEGIN\n");
          vetor[posicao] = 4;
          posicao++;
          i+=4;
       }else if(aux[i]=='e' && aux[i+1]=='n' && aux[i+2]=='d'){ //reconhece END
-         printf("END\n");
+        // printf("END\n");
          vetor[posicao] = 5;
          posicao++;
          i+=2;
       }else if(aux[i]=='p' && aux[i+1]=='r' && aux[i+2]=='i' && aux[i+3]=='n' && aux[i+4]=='t'){ //reconhece PRINT
-         printf("PRINT\n");
+         //printf("PRINT\n");
          vetor[posicao] = 6;
          posicao++;
          i+=4;
       }else if(aux[i]==';'){ //reconhece SEMI
-         printf("SEMI\n");
+         //printf("SEMI\n");
          vetor[posicao] = 7;
          posicao++;
       }else if((aux[i]=='+' || aux[i]=='-' || (aux[i]>=48 && aux[i]<=57))){ //reconhece NUM
@@ -178,14 +181,14 @@ int main(){
             eh_num = 1; //confirma que estamos trantando de um numero
          }i--;
          if(eh_num){ 
-            printf("NUM\n");
+           // printf("NUM\n");
             vetor[posicao] = 8;
             posicao++;
          }else{
-            printf("ERRO\n");
+            //printf("ERRO\n");
          }
       }else if(aux[i]=='='){ //reconhece EQ
-         printf("EQ\n");
+         //printf("EQ\n");
          vetor[posicao] = 9;
          posicao++;
       }
@@ -193,7 +196,6 @@ int main(){
    }
 
    //for(int i=0; i<posicao;i++) printf("%d", vetor[i]);
-   printf("\n");
    tamanho_maximo_tokens = posicao-1;
    // Libera a memória alocada para a string
    free(string);
