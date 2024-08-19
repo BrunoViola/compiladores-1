@@ -40,13 +40,13 @@ void E(int *vetor);
 
 void eat(int t, int *vetor){
         // printf("\nEM: %s : %s", tokenTypeToString(t), tokenTypeToString(vetor[token_posicao]));
-         printf("\n%d posicao %d tam", token_posicao, tamanho_maximo_tokens);
+         //printf("\n%d posicao %d tam", token_posicao, tamanho_maximo_tokens);
    if(vetor[token_posicao]==t){
      // printf("\ndentro");
       
       token_posicao++;
-   }else{
-      if(token_posicao == tamanho_maximo_tokens){
+   }else if(!erro_sintatico){
+      if(token_posicao > tamanho_maximo_tokens){
          printf("ERRO SINTATICO: CADEIA INCOMPLETA");
          erro_sintatico = 1;
          return;
@@ -68,7 +68,7 @@ void S(int *vetor){
    case PRINT: eat(PRINT, vetor); E(vetor); break;
    
    default:
-      printf("ERRO SINTATICO EM: %s ESPERADO: if, begin, print", tokenTypeToString(vetor[token_posicao]));
+      if(!erro_sintatico) printf("ERRO SINTATICO EM: %s ESPERADO: if, begin, print", tokenTypeToString(vetor[token_posicao]));
       erro_sintatico = 1;
       return;
       break;
@@ -88,7 +88,7 @@ void L(int *vetor){
    case SEMI: eat(SEMI, vetor); S(vetor); L(vetor); break;
   
    default:
-      printf("ERRO SINTATICO EM: %s ESPERADO: end, ;", tokenTypeToString(vetor[token_posicao]));
+      if(!erro_sintatico) printf("ERRO SINTATICO EM: %s ESPERADO: end, ;", tokenTypeToString(vetor[token_posicao]));
       erro_sintatico = 1;
       break;
    }
@@ -101,7 +101,7 @@ void E(int *vetor){
    case NUM:
       eat(NUM, vetor); eat(EQ, vetor); eat(NUM, vetor); break;
    default:
-      printf("ERRO SINTATICO EM: %s ESPERADO: num", tokenTypeToString(vetor[token_posicao]));
+      if(!erro_sintatico) printf("ERRO SINTATICO EM: %s ESPERADO: num", tokenTypeToString(vetor[token_posicao]));
       erro_sintatico = 1;
       break;
    }
@@ -192,7 +192,7 @@ int main(){
       i++;
    }
 
-   for(int i=0; i<posicao;i++) printf("%d", vetor[i]);
+   //for(int i=0; i<posicao;i++) printf("%d", vetor[i]);
    printf("\n");
    tamanho_maximo_tokens = posicao-1;
    // Libera a memória alocada para a string
