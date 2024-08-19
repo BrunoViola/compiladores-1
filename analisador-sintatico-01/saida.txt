@@ -2,7 +2,7 @@ PRINT
 NUM
 68
 
-EM: print : print
-EM: num : num
-EM: = : printERRO SINTATICO EM: = ESPERADAO: print
-EM: num : printERRO SINTATICO EM: num ESPERADAO: print
+0 posicao 2 tam
+1 posicao 2 tam
+2 posicao 2 tamERRO SINTATICO: CADEIA INCOMPLETA
+2 posicao 2 tamERRO SINTATICO: CADEIA INCOMPLETA

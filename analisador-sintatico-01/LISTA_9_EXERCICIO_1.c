@@ -14,7 +14,7 @@ typedef enum {
     EQ
 } TokenType;
 
-// Função para converter o valor do enum em uma string
+//Funcao para converter o valor do enum em uma string
 const char* tokenTypeToString(TokenType token) {
     switch (token) {
         case IF: return "if";
@@ -32,19 +32,30 @@ const char* tokenTypeToString(TokenType token) {
 
 int token_posicao = 0;
 int erro_sintatico = 0;
+int tamanho_maximo_tokens = 0;
 
 void S(int *vetor);
 void L(int *vetor);
 void E(int *vetor);
 
 void eat(int t, int *vetor){
-         printf("\nEM: %s : %s", tokenTypeToString(t), tokenTypeToString(vetor[token_posicao]));
-
+        // printf("\nEM: %s : %s", tokenTypeToString(t), tokenTypeToString(vetor[token_posicao]));
+         printf("\n%d posicao %d tam", token_posicao, tamanho_maximo_tokens);
    if(vetor[token_posicao]==t){
+     // printf("\ndentro");
+      
       token_posicao++;
    }else{
-      printf("ERRO SINTATICO EM: %s ESPERADAO: %s", tokenTypeToString(t), tokenTypeToString(vetor[token_posicao]));
+      if(token_posicao == tamanho_maximo_tokens){
+         printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+         erro_sintatico = 1;
+         return;
+      }else{
+         printf("ERRO SINTATICO EM: %s ESPERADAO: %s", tokenTypeToString(t), tokenTypeToString(vetor[token_posicao]));
+         return;
+      }
       erro_sintatico = 1;
+      return;
    }
 }
 
@@ -59,8 +70,15 @@ void S(int *vetor){
    default:
       printf("ERRO SINTATICO EM: %s ESPERADO: if, begin, print", tokenTypeToString(vetor[token_posicao]));
       erro_sintatico = 1;
+      return;
       break;
    }
+
+   if(token_posicao<tamanho_maximo_tokens && !erro_sintatico){
+      S(vetor);
+   }
+
+   return;
 }
 
 void L(int *vetor){
@@ -74,6 +92,7 @@ void L(int *vetor){
       erro_sintatico = 1;
       break;
    }
+   return;
 }
 
 void E(int *vetor){
@@ -81,13 +100,12 @@ void E(int *vetor){
    {
    case NUM:
       eat(NUM, vetor); eat(EQ, vetor); eat(NUM, vetor); break;
-   case '\0':
-      printf("ERRO SINTATICO: CADEIA INCOMPLETA"); break;
    default:
       printf("ERRO SINTATICO EM: %s ESPERADO: num", tokenTypeToString(vetor[token_posicao]));
       erro_sintatico = 1;
       break;
    }
+   return;
 }
 
 int main(){
@@ -176,7 +194,7 @@ int main(){
 
    for(int i=0; i<posicao;i++) printf("%d", vetor[i]);
    printf("\n");
-   
+   tamanho_maximo_tokens = posicao-1;
    // Libera a memória alocada para a string
    free(string);
    S(vetor);
