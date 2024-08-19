@@ -38,11 +38,13 @@ void L(int *vetor);
 void E(int *vetor);
 
 void eat(int t, int *vetor){
+         printf("\nEM: %s : %s", tokenTypeToString(t), tokenTypeToString(vetor[token_posicao]));
+
    if(vetor[token_posicao]==t){
       token_posicao++;
    }else{
-      printf("\nErro");
-      //error();
+      printf("ERRO SINTATICO EM: %s ESPERADAO: %s", tokenTypeToString(t), tokenTypeToString(vetor[token_posicao]));
+      erro_sintatico = 1;
    }
 }
 
@@ -55,7 +57,8 @@ void S(int *vetor){
    case PRINT: eat(PRINT, vetor); E(vetor); break;
    
    default:
-      printf("Erro no S");
+      printf("ERRO SINTATICO EM: %s ESPERADO: if, begin, print", tokenTypeToString(vetor[token_posicao]));
+      erro_sintatico = 1;
       break;
    }
 }
@@ -63,12 +66,12 @@ void S(int *vetor){
 void L(int *vetor){
    switch (vetor[token_posicao])
    {
-   case END:
-      eat(END, vetor); break;
+   case END: eat(END, vetor); break;
    case SEMI: eat(SEMI, vetor); S(vetor); L(vetor); break;
   
    default:
-      printf("Erro no L");
+      printf("ERRO SINTATICO EM: %s ESPERADO: end, ;", tokenTypeToString(vetor[token_posicao]));
+      erro_sintatico = 1;
       break;
    }
 }
@@ -77,10 +80,11 @@ void E(int *vetor){
    switch (vetor[token_posicao])
    {
    case NUM:
-      eat(NUM, vetor); break;
-  
+      eat(NUM, vetor); eat(EQ, vetor); eat(NUM, vetor); break;
+   case '\0':
+      printf("ERRO SINTATICO: CADEIA INCOMPLETA"); break;
    default:
-      printf("Erro sintatico em: %s ESPERADO: num", tokenTypeToString(vetor[token_posicao]));
+      printf("ERRO SINTATICO EM: %s ESPERADO: num", tokenTypeToString(vetor[token_posicao]));
       erro_sintatico = 1;
       break;
    }
@@ -109,8 +113,6 @@ int main(){
      string[length] = '\0';
    }
    
-
-   // Calcula o tamanho da string manualmente
    char *aux = string;
 
    while(aux[i] != '\0') {
@@ -172,7 +174,7 @@ int main(){
       i++;
    }
 
-   for(int i=0; i<=posicao;i++) printf("%d", vetor[i]);
+   for(int i=0; i<posicao;i++) printf("%d", vetor[i]);
    printf("\n");
    
    // Libera a memória alocada para a string
