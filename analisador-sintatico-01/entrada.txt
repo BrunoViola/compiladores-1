@@ -1,1 +1,1 @@
-=if;; ;then if-596begin else print else=if;+0;++-98
+print +994 = 100
