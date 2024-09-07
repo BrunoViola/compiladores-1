@@ -74,11 +74,16 @@ void S(int *vetor) {
       E(vetor); 
       break;
    default:
-      if (token_posicao > tamanho_maximo_tokens) 
-         printf("ERRO SINTATICO: CADEIA INCOMPLETA");
-      else if (!erro_sintatico) 
+      if (token_posicao > tamanho_maximo_tokens){
+         if (!erro_sintatico) {
+            printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+            erro_sintatico = 1;
+         }
+      }
+      else if (!erro_sintatico){ 
          printf("ERRO SINTATICO EM: %s ESPERADO: if, begin, print", tokenTypeToString(vetor[token_posicao]));
-      erro_sintatico = 1;
+         erro_sintatico = 1;
+      }
       return;
    }
 }
@@ -94,11 +99,16 @@ void L(int *vetor){
       L(vetor); 
       break;
    default:
-      if(token_posicao > tamanho_maximo_tokens) 
-         printf("ERRO SINTATICO: CADEIA INCOMPLETA");
-      else if(!erro_sintatico) 
+      if (token_posicao > tamanho_maximo_tokens){
+         if (!erro_sintatico) {
+            printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+            erro_sintatico = 1;
+         }
+      }
+      else if(!erro_sintatico){
          printf("ERRO SINTATICO EM: %s ESPERADO: end, ;", tokenTypeToString(vetor[token_posicao]));
-      erro_sintatico = 1;
+         erro_sintatico = 1;
+      }
       break;
    }
 }
@@ -111,8 +121,12 @@ void E(int *vetor){
       eat(NUM, vetor); 
       break;
    default:
-      if(token_posicao > tamanho_maximo_tokens) 
-         printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+      if (token_posicao > tamanho_maximo_tokens){
+         if (!erro_sintatico) {
+            printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+            erro_sintatico = 1;
+         }
+      }
       else if(!erro_sintatico) 
          printf("ERRO SINTATICO EM: %s ESPERADO: num", tokenTypeToString(vetor[token_posicao]));
       erro_sintatico = 1;
