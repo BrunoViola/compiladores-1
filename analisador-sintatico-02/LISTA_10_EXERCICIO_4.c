@@ -53,6 +53,13 @@ void eat(int t, int *vetor) {
 }
 
 void S(int *vetor) {
+          //  printf("\n%d", tamanho_maximo_tokens);
+    if(tamanho_maximo_tokens==-1){
+        printf("ERRO SINTATICO EM: ESPERADO: id, (");
+                erro_sintatico = 1;
+            
+            return;
+    }
     switch (vetor[token_posicao]) {
         case IDENTIFIER:
             E(vetor); eat(DOLLAR, vetor); break;
@@ -190,11 +197,13 @@ int main() {
     size_t length = 0;
     int read;
     int primeira_linha = 1;
+    int erro_lexico;
 
     while ((read = getline(&string, &length, stdin)) != -1) {
         //Reseta estados
         token_posicao = 0;
         erro_sintatico = 0;
+        erro_lexico = 0;
         
         // Alocação dinamica para o vetor de inteiros
         int vetor_capacidade = 100;
@@ -234,6 +243,7 @@ int main() {
                 if (!primeira_linha) printf("\n");
                 primeira_linha = 0;
                 printf("ERRO LEXICO: %c", string[i]);
+                erro_lexico = 1;
                 while(string[i]!='\n' && string[i]!='\0') i++; //adicionei esse while para que quando um primeiro erro seja detectado, a análise de erro lexico para uma linha é imediatamente parada e passamos para a proxima linha (caso ela exista)
                 i++;  
             }
@@ -251,15 +261,16 @@ int main() {
 
         tamanho_maximo_tokens = posicao - 1;
 
-        
+        //printf("\n%d", tamanho_maximo_tokens);
 
         //Chamar o analisador sintatico
-        S(vetor);
+        if(!erro_lexico){
+            S(vetor);
 
-        if (!erro_sintatico) {
-            printf("CADEIA ACEITA");
+            if (!erro_sintatico) {
+                printf("CADEIA ACEITA");
+            }
         }
-
         if (!primeira_linha) printf("\n");
         primeira_linha = 0;
         
