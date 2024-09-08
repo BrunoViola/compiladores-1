@@ -9,9 +9,6 @@ typedef enum {
     LEFTPARENTHESIS,
     RIGHTPARENTHESIS,
     IDENTIFIER,
-    SEMI,
-    NUM,
-    EQ
 } TokenType;
 
 //Funcao utilziada para converter o valor do enum em uma string
@@ -30,17 +27,21 @@ const char* tokenTypeToString(TokenType token) {
 int token_posicao;
 int erro_sintatico;
 int tamanho_maximo_tokens;
-/*
+
+// ===== INICIO SINTATICO =====
 void S(int *vetor);
-void L(int *vetor);
 void E(int *vetor);
+void ELinha(int *vetor);
+void T(int *vetor);
+void TLinha(int *vetor);
+void F(int *vetor);
 
 void eat(int t, int *vetor) {
     if (vetor[token_posicao] == t) {
         token_posicao++;
     } else if (!erro_sintatico) {
         if (token_posicao > tamanho_maximo_tokens) {
-            printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+            //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
             erro_sintatico = 1;
             return;
         } else {
@@ -53,70 +54,133 @@ void eat(int t, int *vetor) {
 
 void S(int *vetor) {
     switch (vetor[token_posicao]) {
-        case DOLLAR:
-            eat(DOLLAR, vetor); E(vetor); eat(PLUS, vetor); S(vetor); eat(MULTIPLY, vetor); S(vetor);
-            break;
+        case IDENTIFIER:
+            E(vetor); eat(DOLLAR, vetor); break;
         case LEFTPARENTHESIS:
-            eat(LEFTPARENTHESIS, vetor); S(vetor); L(vetor);
-            break;
-        case RIGHTPARENTHESIS:
-            eat(RIGHTPARENTHESIS, vetor); E(vetor);
-            break;
+            E(vetor); eat(DOLLAR, vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
-                    printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO SINTATICO EM: %s ESPERADO: if, begin, print", tokenTypeToString(vetor[token_posicao]));
+                printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             return;
     }
 }
 
-void L(int *vetor) {
+void E(int *vetor) {
     switch (vetor[token_posicao]) {
+        case IDENTIFIER:
+            T(vetor); ELinha(vetor); break;
         case LEFTPARENTHESIS:
-            eat(LEFTPARENTHESIS, vetor);
-            break;
-        case RIGHTPARENTHESIS:
-            eat(RIGHTPARENTHESIS, vetor); S(vetor); L(vetor);
-            break;
+            T(vetor); ELinha(vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
-                    printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO SINTATICO EM: %s ESPERADO: end, ;", tokenTypeToString(vetor[token_posicao]));
+                printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
     }
 }
 
-void E(int *vetor) {
+void ELinha(int *vetor) {
     switch (vetor[token_posicao]) {
-        case NUM:
-            eat(NUM, vetor); eat(EQ, vetor); eat(NUM, vetor);
+        case PLUS:
+            eat(PLUS, vetor); T(vetor); ELinha(vetor); break;
+        case RIGHTPARENTHESIS:
+            break;
+        case DOLLAR:
             break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
-                    printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO SINTATICO EM: %s ESPERADO: num", tokenTypeToString(vetor[token_posicao]));
+                printf("ERRO SINTATICO EM: %s ESPERADO: +, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
     }
 }
-*/
+
+void T(int *vetor) {
+    switch (vetor[token_posicao]) {
+        case IDENTIFIER:
+            F(vetor); TLinha(vetor); break;
+            break;
+        case LEFTPARENTHESIS:
+            F(vetor); TLinha(vetor); break;
+            break;
+        default:
+            if (token_posicao > tamanho_maximo_tokens) {
+                if (!erro_sintatico) {
+                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+                    erro_sintatico = 1;
+                }
+            } else if (!erro_sintatico) {
+                printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
+                erro_sintatico = 1;
+            }
+            break;
+    }
+}
+
+void TLinha(int *vetor) {
+    switch (vetor[token_posicao]) {
+        case MULTIPLY:
+            eat(MULTIPLY, vetor); F(vetor); TLinha(vetor); break;
+        case PLUS:
+            break;
+        case RIGHTPARENTHESIS:
+            break;
+        case DOLLAR:
+            break;
+        default:
+            if (token_posicao > tamanho_maximo_tokens) {
+                if (!erro_sintatico) {
+                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+                    erro_sintatico = 1;
+                }
+            } else if (!erro_sintatico) {
+                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                erro_sintatico = 1;
+            }
+            break;
+    }
+}
+
+void F(int *vetor) {
+    switch (vetor[token_posicao]) {
+        case IDENTIFIER:
+            eat(IDENTIFIER, vetor); break;
+        case LEFTPARENTHESIS:
+            eat(LEFTPARENTHESIS, vetor); E(vetor); eat(RIGHTPARENTHESIS, vetor); break;
+        default:
+            if (token_posicao > tamanho_maximo_tokens) {
+                if (!erro_sintatico) {
+                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+                    erro_sintatico = 1;
+                }
+            } else if (!erro_sintatico) {
+                printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
+                erro_sintatico = 1;
+            }
+            break;
+    }
+}
+// ===== FIM SINTATICO =====
+
 int main() {
     char *string = NULL;
     size_t length = 0;
@@ -163,7 +227,7 @@ int main() {
             } else if((strncmp(&string[i], " ", 1) == 0)||(strncmp(&string[i], "\n", 1) == 0)||(strncmp(&string[i], "\r", 1) == 0)){
                 i++; //Para ignorar espacos e quebra de linha
             }else {
-                printf("ERRO LEXICO: %c", string[i]);
+                printf("\nERRO LEXICO: %c", string[i]);
                 while(string[i]!='\n' && string[i]!='\0') i++; //adicionei esse while para que quando um primeiro erro seja detectado, a análise de erro lexico para uma linha é imediatamente parada e passamos para a proxima linha (caso ela exista)
                 i++;  
             }
@@ -185,7 +249,7 @@ int main() {
         primeira_linha = 0;
 
         //Chamar o analisador sintatico
-        //S(vetor);
+        S(vetor);
 
         if (!erro_sintatico) {
             printf("CADEIA ACEITA");
