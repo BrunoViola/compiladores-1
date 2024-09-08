@@ -128,7 +128,6 @@ void ELinha(int *vetor) {
 void T(int *vetor) {
     switch (vetor[token_posicao]) {
         case IDENTIFIER:
-
             F(vetor); TLinha(vetor); break;
             break;
         case LEFTPARENTHESIS:
@@ -137,6 +136,8 @@ void T(int *vetor) {
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("ERRO SINTATICO EM: ESPERADO: id, ("); // se a cadeia for encerrada de maneira incompleta, esta mensaggem eh printada
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
@@ -259,6 +260,7 @@ int main() {
                     exit(EXIT_FAILURE);
                 }
             }
+            
         }
 
         tamanho_maximo_tokens = posicao - 1;
