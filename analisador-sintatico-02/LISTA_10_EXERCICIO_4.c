@@ -164,6 +164,7 @@ int main() {
                 i++; //Para ignorar espacos e quebra de linha
             }else {
                 printf("ERRO LEXICO: %c", string[i]);
+                while(string[i]!='\n' && string[i]!='\0') i++; //adicionei esse while para que quando um primeiro erro seja detectado, a análise de erro lexico para uma linha é imediatamente parada e passamos para a proxima linha (caso ela exista)
                 i++;  
             }
 
