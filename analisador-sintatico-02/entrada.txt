@@ -1,0 +1,6 @@
+chuchu + abobrinha * abacate32423 $
+variavel * @ + # identificador_403 $
+programa * abc ($
+(i*j+k*l)
+abc def $
+id $
