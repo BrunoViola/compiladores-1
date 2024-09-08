@@ -33,6 +33,7 @@ void quebra_linha(){
     if (!primeira_linha) printf("\n");
     primeira_linha = 0;
 }
+
 // ===== INICIO SINTATICO =====
 void S(int *vetor);
 void E(int *vetor);
@@ -46,6 +47,8 @@ void eat(int t, int *vetor) {
         token_posicao++;
     } else if (!erro_sintatico) {
         if (token_posicao > tamanho_maximo_tokens) {
+            quebra_linha();
+            printf("ERRO SINTATICO EM: %s ESPERADO: %s", tokenTypeToString(vetor[token_posicao]), tokenTypeToString(t)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
             erro_sintatico = 1;
             return;
         } else {
@@ -72,6 +75,8 @@ void S(int *vetor) {
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
@@ -92,6 +97,8 @@ void E(int *vetor) {
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
@@ -114,6 +121,8 @@ void ELinha(int *vetor) {
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("ERRO SINTATICO EM: ESPERADO: +, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
@@ -137,7 +146,7 @@ void T(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: id, ("); // se a cadeia for encerrada de maneira incompleta, esta mensaggem eh printada
+                    printf("ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
@@ -163,8 +172,7 @@ void TLinha(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: %c ESPERADO: +, *, ), $", vetor[token_posicao]);
-                    erro_sintatico = 1;
+                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa                    erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
@@ -184,6 +192,8 @@ void F(int *vetor) {
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
@@ -209,7 +219,7 @@ int main() {
         erro_sintatico = 0;
         erro_lexico = 0;
         
-        // Alocação dinamica para o vetor de inteiros
+        //Alocacao dinamica para o vetor de inteiros
         int vetor_capacidade = 100;
         int *vetor = (int *)malloc(vetor_capacidade * sizeof(int));
         if (vetor == NULL) {
@@ -219,7 +229,7 @@ int main() {
         int posicao = 0;
         int i = 0;
 
-        //Aqui a cadeia lida é Tokenizada
+        //Aqui a cadeia lida eh Tokenizada
         while (string[i] != '\0' && string[i] != '\n') {
             if (strncmp(&string[i], "$", 1) == 0) {
                 vetor[posicao++] = DOLLAR;
