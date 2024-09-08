@@ -27,7 +27,12 @@ const char* tokenTypeToString(TokenType token) {
 int token_posicao;
 int erro_sintatico;
 int tamanho_maximo_tokens;
+int primeira_linha;
 
+void quebra_linha(){
+    if (!primeira_linha) printf("\n");
+    primeira_linha = 0;
+}
 // ===== INICIO SINTATICO =====
 void S(int *vetor);
 void E(int *vetor);
@@ -41,10 +46,10 @@ void eat(int t, int *vetor) {
         token_posicao++;
     } else if (!erro_sintatico) {
         if (token_posicao > tamanho_maximo_tokens) {
-            //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
             erro_sintatico = 1;
             return;
         } else {
+            quebra_linha();
             printf("ERRO SINTATICO EM: %s ESPERADO: %s", tokenTypeToString(vetor[token_posicao]), tokenTypeToString(t));
             erro_sintatico = 1;
             return;
@@ -53,26 +58,24 @@ void eat(int t, int *vetor) {
 }
 
 void S(int *vetor) {
-          //  printf("\n%d", tamanho_maximo_tokens);
     if(tamanho_maximo_tokens==-1){
+        quebra_linha();
         printf("ERRO SINTATICO EM: ESPERADO: id, (");
-                erro_sintatico = 1;
-            
-            return;
+        erro_sintatico = 1;
+        return;
     }
     switch (vetor[token_posicao]) {
         case IDENTIFIER:
             E(vetor); eat(DOLLAR, vetor); break;
         case LEFTPARENTHESIS:
-            //printf("entrou1\n");
             E(vetor); eat(DOLLAR, vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
-                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
+                quebra_linha();
                 printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
@@ -89,10 +92,10 @@ void E(int *vetor) {
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
-                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
+                quebra_linha();
                 printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
@@ -111,10 +114,10 @@ void ELinha(int *vetor) {
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
-                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
+                quebra_linha();
                 printf("ERRO SINTATICO EM: %s ESPERADO: +, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
@@ -134,10 +137,10 @@ void T(int *vetor) {
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
-                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
+                quebra_linha();
                 printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
@@ -158,10 +161,12 @@ void TLinha(int *vetor) {
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
+                    quebra_linha();
                     printf("ERRO SINTATICO EM: %c ESPERADO: +, *, ), $", vetor[token_posicao]);
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
+                quebra_linha();
                 printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
@@ -172,18 +177,16 @@ void TLinha(int *vetor) {
 void F(int *vetor) {
     switch (vetor[token_posicao]) {
         case IDENTIFIER:
-                    //printf("entrou4\n");
-
             eat(IDENTIFIER, vetor); break;
         case LEFTPARENTHESIS:
             eat(LEFTPARENTHESIS, vetor); E(vetor); eat(RIGHTPARENTHESIS, vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
-                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
+                quebra_linha();
                 printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
@@ -196,7 +199,7 @@ int main() {
     char *string = NULL;
     size_t length = 0;
     int read;
-    int primeira_linha = 1;
+    primeira_linha = 1;
     int erro_lexico;
 
     while ((read = getline(&string, &length, stdin)) != -1) {
@@ -240,8 +243,7 @@ int main() {
             } else if((strncmp(&string[i], " ", 1) == 0)||(strncmp(&string[i], "\n", 1) == 0)||(strncmp(&string[i], "\r", 1) == 0)){
                 i++; //Para ignorar espacos e quebra de linha
             }else {
-                if (!primeira_linha) printf("\n");
-                primeira_linha = 0;
+                quebra_linha();
                 printf("ERRO LEXICO: %c", string[i]);
                 erro_lexico = 1;
                 while(string[i]!='\n' && string[i]!='\0') i++; //adicionei esse while para que quando um primeiro erro seja detectado, a análise de erro lexico para uma linha é imediatamente parada e passamos para a proxima linha (caso ela exista)
@@ -261,18 +263,16 @@ int main() {
 
         tamanho_maximo_tokens = posicao - 1;
 
-        //printf("\n%d", tamanho_maximo_tokens);
-
-        //Chamar o analisador sintatico
         if(!erro_lexico){
-            S(vetor);
+            S(vetor); //Chama o analisador sintatico
 
             if (!erro_sintatico) {
+                quebra_linha();
                 printf("CADEIA ACEITA");
+                primeira_linha = 0;
             }
         }
-        if (!primeira_linha) printf("\n");
-        primeira_linha = 0;
+        
         
         //Liberar memoria alocada para o vetor de inteiros
         free(vetor);
