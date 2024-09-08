@@ -57,6 +57,7 @@ void S(int *vetor) {
         case IDENTIFIER:
             E(vetor); eat(DOLLAR, vetor); break;
         case LEFTPARENTHESIS:
+            //printf("entrou1\n");
             E(vetor); eat(DOLLAR, vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
@@ -117,6 +118,7 @@ void ELinha(int *vetor) {
 void T(int *vetor) {
     switch (vetor[token_posicao]) {
         case IDENTIFIER:
+
             F(vetor); TLinha(vetor); break;
             break;
         case LEFTPARENTHESIS:
@@ -149,7 +151,7 @@ void TLinha(int *vetor) {
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
-                    //printf("ERRO SINTATICO: CADEIA INCOMPLETA");
+                    printf("ERRO SINTATICO EM: %c ESPERADO: +, *, ), $", vetor[token_posicao]);
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
@@ -163,6 +165,8 @@ void TLinha(int *vetor) {
 void F(int *vetor) {
     switch (vetor[token_posicao]) {
         case IDENTIFIER:
+                    //printf("entrou4\n");
+
             eat(IDENTIFIER, vetor); break;
         case LEFTPARENTHESIS:
             eat(LEFTPARENTHESIS, vetor); E(vetor); eat(RIGHTPARENTHESIS, vetor); break;
@@ -227,7 +231,9 @@ int main() {
             } else if((strncmp(&string[i], " ", 1) == 0)||(strncmp(&string[i], "\n", 1) == 0)||(strncmp(&string[i], "\r", 1) == 0)){
                 i++; //Para ignorar espacos e quebra de linha
             }else {
-                printf("\nERRO LEXICO: %c", string[i]);
+                if (!primeira_linha) printf("\n");
+                primeira_linha = 0;
+                printf("ERRO LEXICO: %c", string[i]);
                 while(string[i]!='\n' && string[i]!='\0') i++; //adicionei esse while para que quando um primeiro erro seja detectado, a análise de erro lexico para uma linha é imediatamente parada e passamos para a proxima linha (caso ela exista)
                 i++;  
             }
@@ -245,8 +251,7 @@ int main() {
 
         tamanho_maximo_tokens = posicao - 1;
 
-        if (!primeira_linha) printf("\n");
-        primeira_linha = 0;
+        
 
         //Chamar o analisador sintatico
         S(vetor);
@@ -255,6 +260,9 @@ int main() {
             printf("CADEIA ACEITA");
         }
 
+        if (!primeira_linha) printf("\n");
+        primeira_linha = 0;
+        
         //Liberar memoria alocada para o vetor de inteiros
         free(vetor);
     }
