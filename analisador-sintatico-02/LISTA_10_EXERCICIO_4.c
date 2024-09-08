@@ -172,7 +172,8 @@ void TLinha(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa                    erro_sintatico = 1;
+                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
