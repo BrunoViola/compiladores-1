@@ -36,6 +36,25 @@ typedef enum {
     OU,
     NAO,
     DIV,
+    PONTO_VIRGULA,
+    VIRGULA,
+    DOIS_PONTOS,
+    PONTO,
+    ABRE_COLCHETE,
+    FECHA_COLCHETE,
+    ABRE_PARENTESE,
+    FECHA_PARENTESE,
+    IGUAL,
+    DIFERENTE,
+    MAIOR_IGUAL,
+    MENOR_IGUAL,
+    ATRIBUICAO_ESQUERDA,
+    MAIOR,
+    MENOR,
+    MAIS,
+    MENOS,
+    MULTIPLICACAO,
+    DIVISAO,
 } TokenType;
 
 //Funcao utilziada para converter o valor do enum em uma string
@@ -72,6 +91,25 @@ const char* tokenTypeToString(TokenType token) {
         case OU: return "ou";
         case NAO: return "nao";
         case DIV: return "div";
+case PONTO_VIRGULA: return ";";
+        case VIRGULA: return ",";
+        case DOIS_PONTOS: return ":";
+        case PONTO: return ".";
+        case ABRE_COLCHETE: return "[";
+        case FECHA_COLCHETE: return "]";
+        case ABRE_PARENTESE: return "(";
+        case FECHA_PARENTESE: return ")";
+        case IGUAL: return "=";
+        case DIFERENTE: return "<>";
+        case MAIOR_IGUAL: return ">=";
+        case MENOR_IGUAL: return "<=";
+        case ATRIBUICAO_ESQUERDA: return "<-";
+        case MAIOR: return ">";
+        case MENOR: return "<";
+        case MAIS: return "+";
+        case MENOS: return "-";
+        case MULTIPLICACAO: return "*";
+        case DIVISAO: return "/";
         default: return "UNKNOWN";
     }
 }
@@ -411,29 +449,96 @@ int main() {
                vetor[posicao++] = DIV;
                printf("div\n");
                i += 3;
-            }else if((strncmp(&string[i], " ", 1) == 0)||(strncmp(&string[i], "\n", 1) == 0)||(strncmp(&string[i], "\r", 1) == 0)){
+            }            if (strncasecmp(&string[i], ";", 1) == 0) {
+               vetor[posicao++] = PONTO_VIRGULA;
+               printf(";\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], ",", 1) == 0) {
+               vetor[posicao++] = VIRGULA;
+               printf(",\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], ":", 1) == 0) {
+               vetor[posicao++] = DOIS_PONTOS;
+               printf(":\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], ".", 1) == 0) {
+               vetor[posicao++] = PONTO;
+               printf(".\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], "[", 1) == 0) {
+               vetor[posicao++] = ABRE_COLCHETE;
+               printf("[\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], "]", 1) == 0) {
+               vetor[posicao++] = FECHA_COLCHETE;
+               printf("]\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], "(", 1) == 0) {
+               vetor[posicao++] = ABRE_PARENTESE;
+               printf("(\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], ")", 1) == 0) {
+               vetor[posicao++] = FECHA_PARENTESE;
+               printf(")\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], "=", 1) == 0) {
+               vetor[posicao++] = IGUAL;
+               printf("=\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], "<>", 2) == 0) {
+               vetor[posicao++] = DIFERENTE;
+               printf("<>\n");
+               i += 2;
+            } else if (strncasecmp(&string[i], ">=", 2) == 0) {
+               vetor[posicao++] = MAIOR_IGUAL;
+               printf(">=\n");
+               i += 2;
+            } else if (strncasecmp(&string[i], "<=", 2) == 0) {
+               vetor[posicao++] = MENOR_IGUAL;
+               printf("<=\n");
+               i += 2;
+            } else if (strncasecmp(&string[i], "<-", 2) == 0) {
+               vetor[posicao++] = ATRIBUICAO_ESQUERDA;
+               printf("<-\n");
+               i += 2;
+            } else if (strncasecmp(&string[i], ">", 1) == 0) {
+               vetor[posicao++] = MAIOR;
+               printf(">\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], "<", 1) == 0) {
+               vetor[posicao++] = MENOR;
+               printf("<\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], "+", 1) == 0) {
+               vetor[posicao++] = MAIS;
+               printf("+\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], "-", 1) == 0) {
+               vetor[posicao++] = MENOS;
+               printf("-\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], "*", 1) == 0) {
+               vetor[posicao++] = MULTIPLICACAO;
+               printf("*\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], "/", 1) == 0) {
+               vetor[posicao++] = DIVISAO;
+               printf("/\n");
+               i += 1;
+            }else if((strncmp(&string[i], " ", 1) == 0)||(strncmp(&string[i], "\n", 1) == 0)||(strncmp(&string[i], "\r", 1) == 0)||(strncmp(&string[i], "\0", 1) == 0)){
                 i++; //Para ignorar espacos e quebra de linha
-            }/*else if (strncmp(&string[i], "*", 1) == 0) {
-                vetor[posicao++] = MULTIPLY;
-                i ++;
-            } else if (strncmp(&string[i], "(", 1) == 0) {
-                vetor[posicao++] = LEFTPARENTHESIS;
-                i ++;
-            } else if (strncmp(&string[i], ")", 1) == 0) {
-                vetor[posicao++] = RIGHTPARENTHESIS;
-                i ++;
+            }else {
+                quebra_linha();
+                printf("ERRO LEXICO: %c", string[i]);
+                erro_lexico = 1;
+                return 0; 
+            }/*
             } else if (string[i] >= 'a' && string[i] <= 'z') {
                 vetor[posicao++] = IDENTIFIER;
                 while ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= '0' && string[i] <= '9')) {
                     i++;
                 }
-            } else {
-                quebra_linha();
-                printf("ERRO LEXICO: %c", string[i]);
-                erro_lexico = 1;
-                while(string[i]!='\n' && string[i]!='\0') i++; //adicionei esse while para que quando um primeiro erro seja detectado, a análise de erro lexico para uma linha é imediatamente parada e passamos para a proxima linha (caso ela exista)
-                i++;  
-            }
+            } 
             // ===== FIM ANALISADOR LEXICO
             */
             //Se necessario, Aqui eh aumentada a capacidade do vetor
