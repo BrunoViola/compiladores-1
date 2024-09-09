@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
+
 
 typedef enum {
-    DOLLAR = 1,
+    ALGORITMO = 1,
     PLUS,
     MULTIPLY,
     LEFTPARENTHESIS,
@@ -14,7 +16,7 @@ typedef enum {
 //Funcao utilziada para converter o valor do enum em uma string
 const char* tokenTypeToString(TokenType token) {
     switch (token) {
-        case DOLLAR: return "$";
+        case ALGORITMO: return "algoritmo";
         case PLUS: return "+";
         case MULTIPLY: return "*";
         case LEFTPARENTHESIS: return "(";
@@ -33,7 +35,7 @@ void quebra_linha(){
     if (!primeira_linha) printf("\n");
     primeira_linha = 0;
 }
-
+/*
 // ===== INICIO SINTATICO =====
 void S(int *vetor);
 void E(int *vetor);
@@ -206,6 +208,7 @@ void F(int *vetor) {
     }
 }
 // ===== FIM SINTATICO =====
+*/
 
 int main() {
     char *string = NULL;
@@ -230,9 +233,14 @@ int main() {
         int posicao = 0;
         int i = 0;
 
+        // ===== ANALISADOR LEXICO =====
         //Aqui a cadeia lida eh Tokenizada
         while (string[i] != '\0' && string[i] != '\n') {
-            if (strncmp(&string[i], "$", 1) == 0) {
+            if (strncasecmp(&string[i], "algoritmo", 9) == 0) {
+                vetor[posicao++] = ALGORITMO;
+                printf("algoritmo");
+                i += 9;
+            }/*else if (strncmp(&string[i], "$", 1) == 0) {
                 vetor[posicao++] = DOLLAR;
                 i ++;
             } else if (strncmp(&string[i], "+", 1) == 0) {
@@ -261,7 +269,8 @@ int main() {
                 while(string[i]!='\n' && string[i]!='\0') i++; //adicionei esse while para que quando um primeiro erro seja detectado, a análise de erro lexico para uma linha é imediatamente parada e passamos para a proxima linha (caso ela exista)
                 i++;  
             }
-
+            // ===== FIM ANALISADOR LEXICO
+            */
             //Se necessario, Aqui eh aumentada a capacidade do vetor
             if (posicao >= vetor_capacidade) {
                 vetor_capacidade *= 2;
@@ -277,7 +286,7 @@ int main() {
         tamanho_maximo_tokens = posicao - 1;
 
         if(!erro_lexico){
-            S(vetor); //Chama o analisador sintatico
+            //S(vetor); //Chama o analisador sintatico
 
             if (!erro_sintatico) {
                 quebra_linha();
