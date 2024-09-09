@@ -55,6 +55,9 @@ typedef enum {
     MENOS,
     MULTIPLICACAO,
     DIVISAO,
+    IDENTIFICADOR,
+    NUMERO_INTEIRO,
+    NUMERO_REAL,
 } TokenType;
 
 //Funcao utilziada para converter o valor do enum em uma string
@@ -110,6 +113,9 @@ case PONTO_VIRGULA: return ";";
         case MENOS: return "-";
         case MULTIPLICACAO: return "*";
         case DIVISAO: return "/";
+        case IDENTIFICADOR: return "identificador";
+        case NUMERO_INTEIRO: return "numero inteiro";
+        case NUMERO_REAL: return "numero real";
         default: return "UNKNOWN";
     }
 }
@@ -527,20 +533,41 @@ int main() {
                i += 1;
             }else if((strncmp(&string[i], " ", 1) == 0)||(strncmp(&string[i], "\n", 1) == 0)||(strncmp(&string[i], "\r", 1) == 0)||(strncmp(&string[i], "\0", 1) == 0)){
                 i++; //Para ignorar espacos e quebra de linha
+            } else if ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= 'A' && string[i] <= 'Z')||(string[i]=='_')) {//[a-zA-Z_][a-zA-Z0-9_]*
+                vetor[posicao++] = IDENTIFICADOR;
+                while ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= 'A' && string[i] <= 'Z')||(string[i]=='_')||(string[i] >= '0' && string[i] <= '9')) {
+                    i++;
+                }
+                printf("Identificador\n");
+            } else if(string[i] >= '0' && string[i] <= '9'){//[0-9]+
+                vetor[posicao++] = NUMERO_INTEIRO;
+                while (string[i] >= '0' && string[i] <= '9') {
+                    i++;
+                }
+                if(string[i]=='.'){ //[0-9]+.[0-9]*
+                    vetor[posicao++] = NUMERO_REAL;
+                    printf("Numero real\n");
+                    i++;
+                    while (string[i] >= '0' && string[i] <= '9') {
+                        i++;
+                    }
+                }else{
+                    printf("Numero inteiro\n");//[0-9]+
+                }
+            }else if((string[i] >= '0' && string[i] <= '9')&&(string[i++]=='.')){// [0-9]+.[0-9]*
+                i++;
+                while (string[i] >= '0' && string[i] <= '9') {
+                    i++;
+                }
             }else {
                 quebra_linha();
                 printf("ERRO LEXICO: %c", string[i]);
                 erro_lexico = 1;
                 return 0; 
-            }/*
-            } else if (string[i] >= 'a' && string[i] <= 'z') {
-                vetor[posicao++] = IDENTIFIER;
-                while ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= '0' && string[i] <= '9')) {
-                    i++;
-                }
-            } 
+            }
+             
             // ===== FIM ANALISADOR LEXICO
-            */
+            
             //Se necessario, Aqui eh aumentada a capacidade do vetor
             if (posicao >= vetor_capacidade) {
                 vetor_capacidade *= 2;
