@@ -6,25 +6,76 @@
 
 typedef enum {
     ALGORITMO = 1,
-    PLUS,
-    MULTIPLY,
-    LEFTPARENTHESIS,
-    RIGHTPARENTHESIS,
-    IDENTIFIER,
+    INICIO,
+    FIM,
+    VARIAVEIS,
+    INTEIRO,
+    REAL,
+    CARACTERE,
+    LOGICO,
+    VETOR,
+    MATRIZ,
+    TIPO,
+    FUNCAO,
+    PROCEDIMENTO,
+    SE,
+    ENTAO,
+    SENAO,
+    ENQUANTO,
+    FACA,
+    PARA,
+    DE,
+    ATE,
+    PASSO,
+    REPITA,
+    LEIA,
+    IMPRIMA,
+    VERDADEIRO,
+    FALSO,
+    E,
+    OU,
+    NAO,
+    DIV,
 } TokenType;
 
 //Funcao utilziada para converter o valor do enum em uma string
 const char* tokenTypeToString(TokenType token) {
     switch (token) {
         case ALGORITMO: return "algoritmo";
-        case PLUS: return "+";
-        case MULTIPLY: return "*";
-        case LEFTPARENTHESIS: return "(";
-        case RIGHTPARENTHESIS: return ")";
-        case IDENTIFIER: return "id";
+        case INICIO: return "inicio";
+        case FIM: return "fim";
+        case VARIAVEIS: return "variaveis";
+        case INTEIRO: return "inteiro";
+        case REAL: return "real";
+        case CARACTERE: return "caractere";
+        case LOGICO: return "logico";
+        case VETOR: return "vetor";
+        case MATRIZ: return "matriz";
+        case TIPO: return "tipo";
+        case FUNCAO: return "funcao";
+        case PROCEDIMENTO: return "procedimento";
+        case SE: return "se";
+        case ENTAO: return "entao";
+        case SENAO: return "senao";
+        case ENQUANTO: return "enquanto";
+        case FACA: return "faca";
+        case PARA: return "para";
+        case DE: return "de";
+        case ATE: return "ate";
+        case PASSO: return "passo";
+        case REPITA: return "repita";
+        case LEIA: return "leia";
+        case IMPRIMA: return "imprima";
+        case VERDADEIRO: return "verdadeiro";
+        case FALSO: return "falso";
+        case E: return "e";
+        case OU: return "ou";
+        case NAO: return "nao";
+        case DIV: return "div";
         default: return "UNKNOWN";
     }
 }
+
 
 int token_posicao;
 int erro_sintatico;
@@ -236,17 +287,133 @@ int main() {
         // ===== ANALISADOR LEXICO =====
         //Aqui a cadeia lida eh Tokenizada
         while (string[i] != '\0' && string[i] != '\n') {
-            if (strncasecmp(&string[i], "algoritmo", 9) == 0) {
+            if(strncasecmp(&string[i], "algoritmo", 9) == 0) {
                 vetor[posicao++] = ALGORITMO;
-                printf("algoritmo");
+                printf("algoritmo\n");
                 i += 9;
-            }/*else if (strncmp(&string[i], "$", 1) == 0) {
-                vetor[posicao++] = DOLLAR;
-                i ++;
-            } else if (strncmp(&string[i], "+", 1) == 0) {
-                vetor[posicao++] = PLUS;
-                i ++;
-            } else if (strncmp(&string[i], "*", 1) == 0) {
+            }else if (strncasecmp(&string[i], "inicio", 6) == 0) {
+                vetor[posicao++] = INICIO;
+                printf("inicio\n");
+                i += 6;
+            }else if (strncasecmp(&string[i], "fim", 3) == 0) {
+                vetor[posicao++] = FIM;
+                printf("fim\n");
+                i += 3;
+            }else if (strncasecmp(&string[i], "variaveis", 9) == 0) {
+                vetor[posicao++] = VARIAVEIS;
+                printf("variaveis\n");
+                i += 9;
+            }else if (strncasecmp(&string[i], "inteiro", 7) == 0) {
+                vetor[posicao++] = INTEIRO;
+                printf("inteiro\n");
+                i += 7;
+            }else if (strncasecmp(&string[i], "real", 4) == 0) {
+                vetor[posicao++] = REAL;
+                printf("real\n");
+                i += 4;
+            }else if (strncasecmp(&string[i], "caractere", 9) == 0) {
+                vetor[posicao++] = CARACTERE;
+                printf("caractere\n");
+                i += 9;
+            }else if (strncasecmp(&string[i], "logico", 6) == 0) {
+                vetor[posicao++] = LOGICO;
+                printf("logico\n");
+                i += 6;
+            }else if (strncasecmp(&string[i], "vetor", 5) == 0) {
+                vetor[posicao++] = LOGICO;
+                printf("vetor\n");
+                i += 5;
+            }else if (strncasecmp(&string[i], "matriz", 6) == 0) {
+                vetor[posicao++] = MATRIZ;
+                printf("matriz\n");
+                i += 6;
+            }else if (strncasecmp(&string[i], "tipo", 4) == 0) {
+                vetor[posicao++] = TIPO;
+                printf("tipo\n");
+                i += 4;
+            }            if (strncasecmp(&string[i], "funcao", 6) == 0) {
+               vetor[posicao++] = FUNCAO;
+               printf("funcao\n");
+               i += 6;
+            } else if (strncasecmp(&string[i], "procedimento", 12) == 0) {
+               vetor[posicao++] = PROCEDIMENTO;
+               printf("procedimento\n");
+               i += 12;
+            } else if (strncasecmp(&string[i], "se", 2) == 0) {
+               vetor[posicao++] = SE;
+               printf("se\n");
+               i += 2;
+            } else if (strncasecmp(&string[i], "entao", 5) == 0) {
+               vetor[posicao++] = ENTAO;
+               printf("entao\n");
+               i += 5;
+            } else if (strncasecmp(&string[i], "senao", 5) == 0) {
+               vetor[posicao++] = SENAO;
+               printf("senao\n");
+               i += 5;
+            } else if (strncasecmp(&string[i], "enquanto", 8) == 0) {
+               vetor[posicao++] = ENQUANTO;
+               printf("enquanto\n");
+               i += 8;
+            } else if (strncasecmp(&string[i], "faca", 4) == 0) {
+               vetor[posicao++] = FACA;
+               printf("faca\n");
+               i += 4;
+            } else if (strncasecmp(&string[i], "para", 4) == 0) {
+               vetor[posicao++] = PARA;
+               printf("para\n");
+               i += 4;
+            } else if (strncasecmp(&string[i], "de", 2) == 0) {
+               vetor[posicao++] = DE;
+               printf("de\n");
+               i += 2;
+            } else if (strncasecmp(&string[i], "ate", 3) == 0) {
+               vetor[posicao++] = ATE;
+               printf("ate\n");
+               i += 3;
+            } else if (strncasecmp(&string[i], "passo", 5) == 0) {
+               vetor[posicao++] = PASSO;
+               printf("passo\n");
+               i += 5;
+            } else if (strncasecmp(&string[i], "repita", 6) == 0) {
+               vetor[posicao++] = REPITA;
+               printf("repita\n");
+               i += 6;
+            } else if (strncasecmp(&string[i], "leia", 4) == 0) {
+               vetor[posicao++] = LEIA;
+               printf("leia\n");
+               i += 4;
+            } else if (strncasecmp(&string[i], "imprima", 7) == 0) {
+               vetor[posicao++] = IMPRIMA;
+               printf("imprima\n");
+               i += 7;
+            } else if (strncasecmp(&string[i], "verdadeiro", 10) == 0) {
+               vetor[posicao++] = VERDADEIRO;
+               printf("verdadeiro\n");
+               i += 10;
+            } else if (strncasecmp(&string[i], "falso", 5) == 0) {
+               vetor[posicao++] = FALSO;
+               printf("falso\n");
+               i += 5;
+            } else if (strncasecmp(&string[i], "e", 1) == 0) {
+               vetor[posicao++] = E;
+               printf("e\n");
+               i += 1;
+            } else if (strncasecmp(&string[i], "ou", 2) == 0) {
+               vetor[posicao++] = OU;
+               printf("ou\n");
+               i += 2;
+            } else if (strncasecmp(&string[i], "nao", 3) == 0) {
+               vetor[posicao++] = NAO;
+               printf("nao\n");
+               i += 3;
+            } else if (strncasecmp(&string[i], "div", 3) == 0) {
+               vetor[posicao++] = DIV;
+               printf("div\n");
+               i += 3;
+            }else if((strncmp(&string[i], " ", 1) == 0)||(strncmp(&string[i], "\n", 1) == 0)||(strncmp(&string[i], "\r", 1) == 0)){
+                i++; //Para ignorar espacos e quebra de linha
+            }/*else if (strncmp(&string[i], "*", 1) == 0) {
                 vetor[posicao++] = MULTIPLY;
                 i ++;
             } else if (strncmp(&string[i], "(", 1) == 0) {
@@ -260,9 +427,7 @@ int main() {
                 while ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= '0' && string[i] <= '9')) {
                     i++;
                 }
-            } else if((strncmp(&string[i], " ", 1) == 0)||(strncmp(&string[i], "\n", 1) == 0)||(strncmp(&string[i], "\r", 1) == 0)){
-                i++; //Para ignorar espacos e quebra de linha
-            }else {
+            } else {
                 quebra_linha();
                 printf("ERRO LEXICO: %c", string[i]);
                 erro_lexico = 1;
@@ -289,8 +454,8 @@ int main() {
             //S(vetor); //Chama o analisador sintatico
 
             if (!erro_sintatico) {
-                quebra_linha();
-                printf("CADEIA ACEITA");
+                //quebra_linha();
+                //printf("CADEIA ACEITA");
                 primeira_linha = 0;
             }
         }
