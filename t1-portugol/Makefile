@@ -1,5 +1,5 @@
 # Nome do executável
-EXEC = programa
+EXEC = portugol
 
 # Lista de arquivos-fonte
 SRC = portugol.c
