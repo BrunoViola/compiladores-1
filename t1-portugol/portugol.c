@@ -58,6 +58,7 @@ typedef enum {
     IDENTIFICADOR,
     NUMERO_INTEIRO,
     NUMERO_REAL,
+    STRING,
 } TokenType;
 
 //Funcao utilziada para converter o valor do enum em uma string
@@ -94,7 +95,7 @@ const char* tokenTypeToString(TokenType token) {
         case OU: return "ou";
         case NAO: return "nao";
         case DIV: return "div";
-case PONTO_VIRGULA: return ";";
+        case PONTO_VIRGULA: return ";";
         case VIRGULA: return ",";
         case DOIS_PONTOS: return ":";
         case PONTO: return ".";
@@ -116,6 +117,7 @@ case PONTO_VIRGULA: return ";";
         case IDENTIFICADOR: return "identificador";
         case NUMERO_INTEIRO: return "numero inteiro";
         case NUMERO_REAL: return "numero real";
+        case STRING: return "string";
         default: return "UNKNOWN";
     }
 }
@@ -554,11 +556,14 @@ int main() {
                 }else{
                     printf("Numero inteiro\n");//[0-9]+
                 }
-            }else if((string[i] >= '0' && string[i] <= '9')&&(string[i++]=='.')){// [0-9]+.[0-9]*
+            }else if(string[i]=='"'){// token string "texto"
                 i++;
-                while (string[i] >= '0' && string[i] <= '9') {
+                while ((string[i] >= 32 && string[i] <= 33)||(string[i] >= 35 && string[i] <= 126)) {
                     i++;
                 }
+                printf("string\n");
+                i++; //precisa desse i++ para não detectar o fechamento da string como uma nova string
+                vetor[posicao++] = STRING;
             }else {
                 quebra_linha();
                 printf("ERRO LEXICO: %c", string[i]);
