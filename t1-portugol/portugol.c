@@ -59,6 +59,7 @@ typedef enum {
     NUMERO_INTEIRO,
     NUMERO_REAL,
     STRING,
+    COMENTARIO_EM_LINHA,
 } TokenType;
 
 //Funcao utilziada para converter o valor do enum em uma string
@@ -118,6 +119,7 @@ const char* tokenTypeToString(TokenType token) {
         case NUMERO_INTEIRO: return "numero inteiro";
         case NUMERO_REAL: return "numero real";
         case STRING: return "string";
+        case COMENTARIO_EM_LINHA: return "comentario em linha";
         default: return "UNKNOWN";
     }
 }
@@ -529,6 +531,14 @@ int main() {
                vetor[posicao++] = MULTIPLICACAO;
                printf("*\n");
                i += 1;
+            }else if(string[i]=='/' && string[i+1]=='/'){// reconhecimento de comentarios de linha
+                i+=1; //add dois por conta das duas barras
+                while (string[i] != '\n') {
+                    i++;
+                }
+                printf("comentario em linha\n");
+                i++;
+                vetor[posicao++] = COMENTARIO_EM_LINHA;
             } else if (strncasecmp(&string[i], "/", 1) == 0) {
                vetor[posicao++] = DIVISAO;
                printf("/\n");
