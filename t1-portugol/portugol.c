@@ -317,8 +317,12 @@ int main() {
     int read;
     primeira_linha = 1;
     int erro_lexico;
+    int linha = 0;
+
+    int posicao = 0;
 
     while ((read = getline(&string, &length, stdin)) != -1) {
+        linha++;
         //Reseta estados
         token_posicao = 0;
         erro_sintatico = 0;
@@ -331,7 +335,7 @@ int main() {
             perror("Erro ao alocar memoria");
             exit(EXIT_FAILURE);
         }
-        int posicao = 0;
+        
         int i = 0;
 
         // ===== ANALISADOR LEXICO =====
@@ -591,6 +595,7 @@ int main() {
                     // Se chegar ao final da string atual, ler uma nova linha
                     if (string[i] == '\n') {
                         getline(&string, &length, stdin);  // Lê a próxima linha
+                        linha++;
                         i = 0;  // Reinicia o índice 'i' para a nova linha
                     }
 
@@ -604,13 +609,12 @@ int main() {
                     i++;
                     if(string[i]=='\0'){ //isso aqui é para caso um comentario em bloco nao tenha sido finalizado corretamente
                         return 0;
-                    }
-
-                    vetor[posicao++] = COMENTARIO_EM_BLOCO;
+                    }  
                 }
+                vetor[posicao++] = COMENTARIO_EM_BLOCO;
             }else {
                 quebra_linha();
-                printf("ERRO LEXICO: %c aa", string[i]);
+                printf("ERRO LEXICO. Linha: %d Coluna: %d -> '%c'", (linha), (i+1), string[i]);
                 erro_lexico = 1;
                 return 0; 
             }
@@ -618,13 +622,16 @@ int main() {
             // ===== FIM ANALISADOR LEXICO
             
             //Se necessario, Aqui eh aumentada a capacidade do vetor
+            //printf("tamanho %d %d", posicao, vetor_capacidade);
             if (posicao >= vetor_capacidade) {
-                vetor_capacidade *= 2;
-                vetor = (int *)realloc(vetor, vetor_capacidade * sizeof(int));
-                if (vetor == NULL) {
+                vetor_capacidade *= 2; // Dobre a capacidade
+                int *temp = realloc(vetor, vetor_capacidade * sizeof(int));
+                if (temp == NULL) {
                     perror("Erro ao realocar memoria");
+                    free(vetor); // Libere a memória previamente alocada
                     exit(EXIT_FAILURE);
                 }
+                vetor = temp; // Atualize o ponteiro
             }
             
         }
