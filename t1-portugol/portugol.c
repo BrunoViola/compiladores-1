@@ -60,6 +60,7 @@ typedef enum {
     NUMERO_REAL,
     STRING,
     COMENTARIO_EM_LINHA,
+    COMENTARIO_EM_BLOCO,
 } TokenType;
 
 //Funcao utilziada para converter o valor do enum em uma string
@@ -120,6 +121,7 @@ const char* tokenTypeToString(TokenType token) {
         case NUMERO_REAL: return "numero real";
         case STRING: return "string";
         case COMENTARIO_EM_LINHA: return "comentario em linha";
+        case COMENTARIO_EM_BLOCO: return "comentario em bloco";
         default: return "UNKNOWN";
     }
 }
@@ -587,7 +589,7 @@ int main() {
 
                 while (1) {  // Loop infinito até encontrar o '}' que fecha o comentário
                     // Se chegar ao final da string atual, ler uma nova linha
-                    if (string[i] == '\0' || string[i] == '\n') {
+                    if (string[i] == '\n') {
                         getline(&string, &length, stdin);  // Lê a próxima linha
                         i = 0;  // Reinicia o índice 'i' para a nova linha
                     }
@@ -600,6 +602,11 @@ int main() {
                     }
                     // Avança para o próximo caractere
                     i++;
+                    if(string[i]=='\0'){ //isso aqui é para caso um comentario em bloco nao tenha sido finalizado corretamente
+                        return 0;
+                    }
+
+                    vetor[posicao++] = COMENTARIO_EM_BLOCO;
                 }
             }else {
                 quebra_linha();
