@@ -335,6 +335,8 @@ int main() {
         // ===== ANALISADOR LEXICO =====
         //Aqui a cadeia lida eh Tokenizada
         while (string[i] != '\0' && string[i] != '\n') {
+            //printf("\n i = %d ", i);
+
             if(strncasecmp(&string[i], "algoritmo", 9) == 0) {
                 vetor[posicao++] = ALGORITMO;
                 printf("algoritmo\n");
@@ -368,7 +370,7 @@ int main() {
                 printf("logico\n");
                 i += 6;
             }else if (strncasecmp(&string[i], "vetor", 5) == 0) {
-                vetor[posicao++] = LOGICO;
+                vetor[posicao++] = VETOR;
                 printf("vetor\n");
                 i += 5;
             }else if (strncasecmp(&string[i], "matriz", 6) == 0) {
@@ -459,7 +461,7 @@ int main() {
                vetor[posicao++] = DIV;
                printf("div\n");
                i += 3;
-            }            if (strncasecmp(&string[i], ";", 1) == 0) {
+            }  else if (strncasecmp(&string[i], ";", 1) == 0) {
                vetor[posicao++] = PONTO_VIRGULA;
                printf(";\n");
                i += 1;
@@ -539,13 +541,14 @@ int main() {
                 printf("comentario em linha\n");
                 i++;
                 vetor[posicao++] = COMENTARIO_EM_LINHA;
-            } else if (strncasecmp(&string[i], "/", 1) == 0) {
+            } else if (strncasecmp(&string[i], "/", 1) == 0) { // o reconhecimento da divisao deve ser abaixo do comentario de linha por questoes de precedencia
                vetor[posicao++] = DIVISAO;
                printf("/\n");
                i += 1;
             }else if((strncmp(&string[i], " ", 1) == 0)||(strncmp(&string[i], "\n", 1) == 0)||(strncmp(&string[i], "\r", 1) == 0)||(strncmp(&string[i], "\0", 1) == 0)){
                 i++; //Para ignorar espacos e quebra de linha
             } else if ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= 'A' && string[i] <= 'Z')||(string[i]=='_')) {//[a-zA-Z_][a-zA-Z0-9_]*
+                //printf("\n\n%d ", i);
                 vetor[posicao++] = IDENTIFICADOR;
                 while ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= 'A' && string[i] <= 'Z')||(string[i]=='_')||(string[i] >= '0' && string[i] <= '9')) {
                     i++;
@@ -571,12 +574,36 @@ int main() {
                 while ((string[i] >= 32 && string[i] <= 33)||(string[i] >= 35 && string[i] <= 126)) {
                     i++;
                 }
-                printf("string\n");
+                if(string[i]=='"'){
+                    printf("string\n");
+                }else{
+                    printf("ERRO LEXICO: %c", string[i]);
+                    return 0;
+                }
                 i++; //precisa desse i++ para não detectar o fechamento da string como uma nova string
                 vetor[posicao++] = STRING;
+            }else if (string[i] == '{') {  // Reconhecimento de comentário em bloco
+                i++;  // Avança para o próximo caractere depois de '{'
+
+                while (1) {  // Loop infinito até encontrar o '}' que fecha o comentário
+                    // Se chegar ao final da string atual, ler uma nova linha
+                    if (string[i] == '\0' || string[i] == '\n') {
+                        getline(&string, &length, stdin);  // Lê a próxima linha
+                        i = 0;  // Reinicia o índice 'i' para a nova linha
+                    }
+
+                    // Se encontrar o '}' que fecha o comentário
+                    if (string[i] == '}') {
+                        printf("comentário em bloco\n");
+                        i++;  // Avança após '}'
+                        break;  // Sai do loop, comentário fechado
+                    }
+                    // Avança para o próximo caractere
+                    i++;
+                }
             }else {
                 quebra_linha();
-                printf("ERRO LEXICO: %c", string[i]);
+                printf("ERRO LEXICO: %c aa", string[i]);
                 erro_lexico = 1;
                 return 0; 
             }
