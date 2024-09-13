@@ -152,6 +152,7 @@ void DECLARA_TIPO(int *vetor);
 void DECLARA_VARIAVEIS(int *vetor);
 void DECLARA_IDENTIFICADOR(int *vetor);
 void DECLARA_IDENTIFICADOR_ELSE(int *vetor);
+void VETOR_MATRIZ(int *vetor);
 void DIMENSAO(int *vetor);
 void DIMENSAO_X(int *vetor);
 void TIPO_BASICO(int *vetor);
@@ -162,6 +163,10 @@ void COMANDOS(int *vetor);
 void COMANDOS_X(int *vetor);
 void COMANDOS_X2(int *vetor);
 void COMANDOS_X3(int *vetor);
+void EXPRESSAO(int *vetor);
+void EXPRESSAO_X(int *vetor);
+void EXPRESSAO_SIMPLES(int *vetor);
+void EXPRESSAO_SIMPLES_X(int *vetor);
 
 void eat(int t, int *vetor) {
     if (vetor[token_posicao] == t) {
@@ -662,6 +667,107 @@ void COMANDOS_X3(int *vetor) {
         case PASSO:
             eat(PASSO, vetor); EXPRESSAO(vetor); eat(FACA, vetor); LISTA_COMANDOS(vetor); eat(FIM, vetor); eat(PARA, vetor); break;
         default:
+            break;
+    }
+}
+
+void EXPRESSAO(int *vetor) {
+    switch (vetor[token_posicao]) {
+        case MAIS:
+        case MENOS:
+        case ABRE_PARENTESE:
+        case NAO:
+        case NUMERO_INTEIRO:
+        case NUMERO_REAL:
+        case VERDADEIRO:
+        case FALSO:
+        case STRING:
+        case IDENTIFICADOR:
+            EXPRESSAO_SIMPLES(vetor); EXPRESSAO_X(vetor); break;
+        default:
+            if (token_posicao > tamanho_maximo_tokens) {
+                if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    erro_sintatico = 1;
+                }
+            } else if (!erro_sintatico) {
+                quebra_linha();
+                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                erro_sintatico = 1;
+            }
+            break;
+    }
+}
+
+void EXPRESSAO_X(int *vetor) {
+    switch (vetor[token_posicao]) {
+        case IGUAL:
+            eat(IGUAL, vetor); EXPRESSAO_SIMPLES(vetor); EXPRESSAO_X(vetor); break;
+        case DIFERENTE:
+            eat(DIFERENTE, vetor); EXPRESSAO_SIMPLES(vetor); EXPRESSAO_X(vetor); break;
+        case MENOR:
+            eat(MENOR, vetor); EXPRESSAO_SIMPLES(vetor); EXPRESSAO_X(vetor); break;
+        case MENOR_IGUAL:
+            eat(MENOR_IGUAL, vetor); EXPRESSAO_SIMPLES(vetor); EXPRESSAO_X(vetor); break;
+        case MAIOR_IGUAL:
+            eat(MAIOR_IGUAL, vetor); EXPRESSAO_SIMPLES(vetor); EXPRESSAO_X(vetor); break;
+        case MAIOR:
+            eat(MAIOR, vetor); EXPRESSAO_SIMPLES(vetor); EXPRESSAO_X(vetor); break;
+        default:
+            break;
+    }
+}
+
+void EXPRESSAO_SIMPLES(int *vetor) {
+    switch (vetor[token_posicao]) {
+        case MAIS:
+        case MENOS:
+        case OU:
+        case ABRE_PARENTESE:
+        case NAO:
+        case NUMERO_INTEIRO:
+        case NUMERO_REAL:
+        case VERDADEIRO:
+        case FALSO:
+        case STRING:
+        case IDENTIFICADOR:
+            TERMO(vetor); EXPRESSAO_SIMPLES_X(vetor); break;
+        default:
+            if (token_posicao > tamanho_maximo_tokens) {
+                if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    erro_sintatico = 1;
+                }
+            } else if (!erro_sintatico) {
+                quebra_linha();
+                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                erro_sintatico = 1;
+            }
+            break;
+    }
+}
+
+void EXPRESSAO_SIMPLES_X(int *vetor) {
+    switch (vetor[token_posicao]) {
+        case MAIS:
+            eat(MAIS, vetor); TERMO(vetor); EXPRESSAO_SIMPLES_X(vetor); break;
+        case MENOS:
+            eat(MENOS, vetor); TERMO(vetor); EXPRESSAO_SIMPLES_X(vetor); break;
+        case OU:
+            eat(OU, vetor); TERMO(vetor); EXPRESSAO_SIMPLES_X(vetor); break;
+        case ABRE_PARENTESE:
+        case NAO:
+        case NUMERO_INTEIRO:
+        case NUMERO_REAL:
+        case VERDADEIRO:
+        case FALSO:
+        case STRING:
+        case IDENTIFICADOR:
+            TERMO(vetor); EXPRESSAO_SIMPLES_X(vetor); break;
+        default:
+            
             break;
     }
 }
