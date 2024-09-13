@@ -160,6 +160,8 @@ void LISTA_COMANDOS(int *vetor);
 void LISTA_COMANDOS_X(int *vetor);
 void COMANDOS(int *vetor);
 void COMANDOS_X(int *vetor);
+void COMANDOS_X2(int *vetor);
+void COMANDOS_X3(int *vetor);
 
 void eat(int t, int *vetor) {
     if (vetor[token_posicao] == t) {
@@ -604,7 +606,17 @@ void COMANDOS(int *vetor) {
         case IDENTIFICADOR:
             eat(IDENTIFICADOR, vetor); COMANDOS_X(vetor); break;
         case SE:
-            eat(SE, vetor); EXPRESSAO(vetor); eat(ENTAO, vetor); LISTA_COMANDOS(vetor); COMANDOS_X2(vetor); break; 
+            eat(SE, vetor); EXPRESSAO(vetor); eat(ENTAO, vetor); LISTA_COMANDOS(vetor); COMANDOS_X2(vetor); break;
+        case ENQUANTO:
+            eat(ENQUANTO, vetor); EXPRESSAO(vetor); eat(FACA, vetor); LISTA_COMANDOS(vetor); eat(FIM, vetor); eat(ENQUANTO, vetor); break;
+        case PARA:
+            eat(PARA, vetor); eat(IDENTIFICADOR, vetor); eat(DE, vetor); EXPRESSAO(vetor); eat(ATE, vetor); EXPRESSAO(vetor); COMANDOS_X3(vetor); break;
+        case REPITA:
+            eat(REPITA, vetor); LISTA_COMANDOS(vetor); eat(ATE, vetor); EXPRESSAO(vetor); break;
+        case LEIA:
+            eat(LEIA, vetor); eat(ABRE_PARENTESE, vetor); VARIAVEL(vetor); eat(FECHA_PARENTESE, vetor); break;
+        case IMPRIMA:
+            eat(IMPRIMA, vetor); eat(ABRE_PARENTESE, vetor); EXPRITER(vetor); eat(FECHA_PARENTESE, vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
@@ -638,6 +650,17 @@ void COMANDOS_X2(int *vetor) {
             eat(FIM, vetor); eat(SE, vetor); break;
         case SENAO:
             eat(SENAO, vetor); LISTA_COMANDOS(vetor); eat(FIM, vetor); eat(SE, vetor); break;
+        default:
+            break;
+    }
+}
+
+void COMANDOS_X3(int *vetor) {
+    switch (vetor[token_posicao]) {
+        case FACA:
+            eat(FACA, vetor); LISTA_COMANDOS(vetor); eat(FIM, vetor); eat(PARA, vetor); break;
+        case PASSO:
+            eat(PASSO, vetor); EXPRESSAO(vetor); eat(FACA, vetor); LISTA_COMANDOS(vetor); eat(FIM, vetor); eat(PARA, vetor); break;
         default:
             break;
     }
