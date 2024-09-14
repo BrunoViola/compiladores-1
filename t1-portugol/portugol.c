@@ -167,6 +167,11 @@ void EXPRESSAO(int *vetor);
 void EXPRESSAO_X(int *vetor);
 void EXPRESSAO_SIMPLES(int *vetor);
 void EXPRESSAO_SIMPLES_X(int *vetor);
+void TERMO(int *vetor);
+void TERMO_X(int *vetor);
+void FATOR(int *vetor);
+void VARIAVEL(int *vetor);
+void EXPRITER(int *vetor);
 
 void eat(int t, int *vetor) {
     if (vetor[token_posicao] == t) {
@@ -199,11 +204,11 @@ void PROGRAMA(int *vetor) {
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
-                    printf("ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("1ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
+                printf("11ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             return;
@@ -222,12 +227,12 @@ void PROCEDIMENTO_FUNCAO(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("2ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
+                printf("22ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -242,12 +247,12 @@ void DECLARA_PROCEDIMENTO(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("3ERRO SINTATICO EM: ESPERADO: +, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("33ERRO SINTATICO EM: %s ESPERADO: +, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -263,12 +268,12 @@ void DECLARA_FUNCAO(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("4ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
+                printf("44ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -287,12 +292,12 @@ void PARAMETROS(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("5ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("55ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -320,12 +325,12 @@ void DECLARA_PARAMETROS(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("6ERRO SINTATICO EM: ESPERADO: id, ("); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
+                printf("66ERRO SINTATICO EM: %s ESPERADO: id, (", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -346,12 +351,12 @@ void BLOCO_VARIAVEIS(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("7ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("77ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -376,12 +381,12 @@ void DECLARACOES(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("8ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("88ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -414,12 +419,12 @@ void DECLARA_TIPO(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("9ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("99ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -442,12 +447,12 @@ void DECLARA_VARIAVEIS(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("aERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("aaERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -462,12 +467,12 @@ void DECLARA_IDENTIFICADOR(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("bERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("bbERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -492,12 +497,12 @@ void VETOR_MATRIZ(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("cERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("ccERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -512,12 +517,12 @@ void DIMENSAO(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("dERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("ddERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -549,12 +554,12 @@ void TIPO_BASICO(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("eERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("eeERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -585,12 +590,12 @@ void LISTA_COMANDOS(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("fERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("ffERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -626,12 +631,12 @@ void COMANDOS(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("gERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("ggERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -688,12 +693,12 @@ void EXPRESSAO(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("hERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("hhERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -737,12 +742,12 @@ void EXPRESSAO_SIMPLES(int *vetor) {
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
                     quebra_linha();
-                    printf("ERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    printf("iERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
                 quebra_linha();
-                printf("ERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("iiERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
@@ -771,6 +776,156 @@ void EXPRESSAO_SIMPLES_X(int *vetor) {
             break;
     }
 }
+
+void TERMO(int *vetor) {
+    switch (vetor[token_posicao]) {
+        case ABRE_PARENTESE:
+        case NAO:
+        case NUMERO_INTEIRO:
+        case NUMERO_REAL:
+        case VERDADEIRO:
+        case FALSO:
+        case STRING:
+        case IDENTIFICADOR:
+            FATOR(vetor); TERMO_X(vetor); break;
+        default:
+            if (token_posicao > tamanho_maximo_tokens) {
+                if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("jERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    erro_sintatico = 1;
+                }
+            } else if (!erro_sintatico) {
+                quebra_linha();
+                printf("jjERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                erro_sintatico = 1;
+            }
+            break;
+    }
+}
+
+void TERMO_X(int *vetor) {
+    switch (vetor[token_posicao]) {
+        case MULTIPLICACAO:
+            eat(MULTIPLICACAO, vetor); FATOR(vetor); TERMO_X(vetor); break;
+        case DIVISAO:
+            eat(DIVISAO, vetor); FATOR(vetor); TERMO_X(vetor); break;
+        case DIV:
+            eat(DIV, vetor); FATOR(vetor); TERMO_X(vetor); break;
+        case E:
+            eat(E, vetor); FATOR(vetor); TERMO_X(vetor); break;        
+        default:
+            
+            break;
+    }
+}
+
+void FATOR(int *vetor) {
+    int verifica;
+    switch (vetor[token_posicao]) {
+        case ABRE_PARENTESE:
+            eat(ABRE_PARENTESE, vetor); EXPRESSAO(vetor); eat(FECHA_PARENTESE, vetor); break;
+        case NAO:
+            eat(NAO, vetor); FATOR(vetor); break;
+        case NUMERO_INTEIRO:
+            eat(NUMERO_INTEIRO, vetor); break;
+        case NUMERO_REAL:
+            eat(NUMERO_REAL, vetor); break;
+        case VERDADEIRO:
+            eat(VERDADEIRO, vetor); break;
+        case FALSO:
+            eat(FALSO, vetor); break;
+        case STRING:
+            eat(STRING, vetor); break;
+        case IDENTIFICADOR:
+            verifica = token_posicao + 1;
+            if(vetor[verifica]==ABRE_PARENTESE){
+                eat(IDENTIFICADOR, vetor); eat(ABRE_PARENTESE, vetor); EXPRITER(vetor); eat(FECHA_PARENTESE, vetor);
+            }else if(vetor[verifica]== ABRE_COLCHETE){
+                VARIAVEL(vetor);
+            }else{
+                VARIAVEL(vetor);
+            } break;
+
+        default:
+            if (token_posicao > tamanho_maximo_tokens) {
+                if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("kERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    erro_sintatico = 1;
+                }
+            } else if (!erro_sintatico) {
+                quebra_linha();
+                printf("kkERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                erro_sintatico = 1;
+            }
+            break;
+    }
+}
+
+void VARIAVEL(int *vetor) {
+    int verifica;
+    switch (vetor[token_posicao]) {
+        case IDENTIFICADOR:
+            verifica = token_posicao + 1;
+            if(vetor[verifica]==ABRE_COLCHETE){
+                eat(IDENTIFICADOR, vetor); eat(ABRE_COLCHETE, vetor); EXPRITER(vetor); eat(FECHA_COLCHETE, vetor);
+            }else{
+                eat(IDENTIFICADOR, vetor);
+            } break;
+
+        default:
+            if (token_posicao > tamanho_maximo_tokens) {
+                if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("lERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    erro_sintatico = 1;
+                }
+            } else if (!erro_sintatico) {
+                quebra_linha();
+                printf("llERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                erro_sintatico = 1;
+            }
+            break;
+    }
+}
+
+void EXPRITER(int *vetor) {
+    int verifica;
+    switch (vetor[token_posicao]) {
+        case MAIS:
+        case MENOS:
+        case ABRE_PARENTESE:
+        case NAO:
+        case NUMERO_INTEIRO:
+        case NUMERO_REAL:
+        case VERDADEIRO:
+        case FALSO:
+        case STRING:
+        case IDENTIFICADOR:
+        verifica = token_posicao + 1;
+            if(vetor[verifica]==VIRGULA){
+                EXPRESSAO(vetor); eat(VIRGULA, vetor); EXPRITER(vetor);
+            }else{
+                EXPRESSAO(vetor);
+            } break;
+
+        default:
+            if (token_posicao > tamanho_maximo_tokens) {
+                if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("mERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    erro_sintatico = 1;
+                }
+            } else if (!erro_sintatico) {
+                quebra_linha();
+                printf("mmERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                erro_sintatico = 1;
+            }
+            break;
+    }
+}
+
 // ===== FIM SINTATICO =====
 // ============================
 
