@@ -199,6 +199,10 @@ void PROGRAMA(int *vetor) {
         return;
     }
     switch (vetor[token_posicao]) {
+        case COMENTARIO_EM_LINHA:
+            eat(COMENTARIO_EM_LINHA, vetor);  break;
+        case COMENTARIO_EM_BLOCO:
+            eat(COMENTARIO_EM_BLOCO, vetor);  break;
         case ALGORITMO:
             eat(ALGORITMO, vetor);eat(IDENTIFICADOR, vetor);eat(PONTO_VIRGULA, vetor); BLOCO_VARIAVEIS(vetor); PROCEDIMENTO_FUNCAO(vetor); BLOCO_COMANDOS(vetor); eat(PONTO, vetor); break;
         default:
@@ -347,6 +351,8 @@ void BLOCO_VARIAVEIS(int *vetor) {
             break;
         case FUNCAO:
             break;
+        case COMENTARIO_EM_BLOCO:
+            eat(COMENTARIO_EM_BLOCO, vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
@@ -938,7 +944,13 @@ int main() {
     int linha = 0;
 
     int posicao = 0;
-
+    //Alocacao dinamica para o vetor de inteiros
+    int vetor_capacidade = 100;
+    int *vetor = (int *)malloc(vetor_capacidade * sizeof(int));
+    if (vetor == NULL) {
+        perror("Erro ao alocar memoria");
+        exit(EXIT_FAILURE);
+    }
     while ((read = getline(&string, &length, stdin)) != -1) {
         linha++;
         //Reseta estados
@@ -946,13 +958,7 @@ int main() {
         erro_sintatico = 0;
         erro_lexico = 0;
         
-        //Alocacao dinamica para o vetor de inteiros
-        int vetor_capacidade = 100;
-        int *vetor = (int *)malloc(vetor_capacidade * sizeof(int));
-        if (vetor == NULL) {
-            perror("Erro ao alocar memoria");
-            exit(EXIT_FAILURE);
-        }
+        
         
         int i = 0;
 
@@ -1256,7 +1262,13 @@ int main() {
 
         tamanho_maximo_tokens = posicao - 1;
 
-        if(!erro_lexico){
+        
+        
+        
+        //Liberar memoria alocada para o vetor de inteiros
+        //free(vetor);
+    }
+    if(!erro_lexico){
             PROGRAMA(vetor); //Chama o analisador sintatico
 
             if (!erro_sintatico) {
@@ -1264,13 +1276,7 @@ int main() {
                 printf("PROGRAMA CORRETO.");
                 primeira_linha = 0;
             }
-        }
-        
-        
-        //Liberar memoria alocada para o vetor de inteiros
-        free(vetor);
     }
-
     //Libera a memoria usada para a string
     free(string);
 
