@@ -179,12 +179,12 @@ void eat(int t, int *vetor) {
     } else if (!erro_sintatico) {
         if (token_posicao > tamanho_maximo_tokens) {
             quebra_linha();
-            printf("ERRO SINTATICO EM: %s ESPERADO: %s", tokenTypeToString(vetor[token_posicao]), tokenTypeToString(t)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+            printf("sERRO SINTATICO EM: %s ESPERADO: %s", tokenTypeToString(vetor[token_posicao]), tokenTypeToString(t)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
             erro_sintatico = 1;
             return;
         } else {
             quebra_linha();
-            printf("ERRO SINTATICO EM: %s ESPERADO: %s", tokenTypeToString(vetor[token_posicao]), tokenTypeToString(t));
+            printf("ssERRO SINTATICO EM: %s ESPERADO: %s", tokenTypeToString(vetor[token_posicao]), tokenTypeToString(t));
             erro_sintatico = 1;
             return;
         }
@@ -200,9 +200,9 @@ void PROGRAMA(int *vetor) {
     }
     switch (vetor[token_posicao]) {
         case COMENTARIO_EM_LINHA:
-            eat(COMENTARIO_EM_LINHA, vetor);  break;
+            eat(COMENTARIO_EM_LINHA, vetor); PROGRAMA(vetor); break;
         case COMENTARIO_EM_BLOCO:
-            eat(COMENTARIO_EM_BLOCO, vetor);  break;
+            eat(COMENTARIO_EM_BLOCO, vetor); PROGRAMA(vetor); break;
         case ALGORITMO:
             eat(ALGORITMO, vetor);eat(IDENTIFICADOR, vetor);eat(PONTO_VIRGULA, vetor); BLOCO_VARIAVEIS(vetor); PROCEDIMENTO_FUNCAO(vetor); BLOCO_COMANDOS(vetor); eat(PONTO, vetor); break;
         default:
@@ -227,6 +227,10 @@ void PROCEDIMENTO_FUNCAO(int *vetor) {
             DECLARA_FUNCAO(vetor); PROCEDIMENTO_FUNCAO(vetor); break;
         case INICIO:
             break;
+        case COMENTARIO_EM_BLOCO:
+            eat(COMENTARIO_EM_BLOCO, vetor); PROCEDIMENTO_FUNCAO(vetor); break;
+        case COMENTARIO_EM_LINHA:
+            eat(COMENTARIO_EM_LINHA, vetor); PROCEDIMENTO_FUNCAO(vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
@@ -247,6 +251,10 @@ void DECLARA_PROCEDIMENTO(int *vetor) {
     switch (vetor[token_posicao]) {
         case PROCEDIMENTO:
             eat(PROCEDIMENTO, vetor); eat(IDENTIFICADOR, vetor); PARAMETROS(vetor); eat(PONTO_VIRGULA, vetor); DECLARA_PARAMETROS(vetor); BLOCO_VARIAVEIS(vetor); BLOCO_COMANDOS(vetor); eat(PONTO_VIRGULA, vetor); break;
+        case COMENTARIO_EM_BLOCO:
+            eat(COMENTARIO_EM_BLOCO, vetor); DECLARA_PROCEDIMENTO(vetor); break;
+        case COMENTARIO_EM_LINHA:
+            eat(COMENTARIO_EM_LINHA, vetor); DECLARA_PROCEDIMENTO(vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
@@ -268,6 +276,10 @@ void DECLARA_FUNCAO(int *vetor) {
         case FUNCAO:
             eat(FUNCAO, vetor); eat(IDENTIFICADOR, vetor); PARAMETROS(vetor); eat(DOIS_PONTOS, vetor); TIPO_BASICO(vetor); eat(PONTO_VIRGULA, vetor); DECLARA_PARAMETROS(vetor); BLOCO_VARIAVEIS(vetor); BLOCO_COMANDOS(vetor); eat(PONTO_VIRGULA, vetor); break;
             break;
+        case COMENTARIO_EM_BLOCO:
+            eat(COMENTARIO_EM_BLOCO, vetor); DECLARA_FUNCAO(vetor); break;
+        case COMENTARIO_EM_LINHA:
+            eat(COMENTARIO_EM_LINHA, vetor); DECLARA_FUNCAO(vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
@@ -292,6 +304,10 @@ void PARAMETROS(int *vetor) {
             break;
         case DOIS_PONTOS:
             break;
+        case COMENTARIO_EM_BLOCO:
+            eat(COMENTARIO_EM_BLOCO, vetor); PARAMETROS(vetor); break;
+        case COMENTARIO_EM_LINHA:
+            eat(COMENTARIO_EM_LINHA, vetor); PARAMETROS(vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
@@ -322,6 +338,10 @@ void DECLARA_PARAMETROS(int *vetor) {
             DECLARACOES(vetor); break;
         case TIPO:
             DECLARACOES(vetor); break;
+        case COMENTARIO_EM_BLOCO:
+            eat(COMENTARIO_EM_BLOCO, vetor); DECLARA_PARAMETROS(vetor); break;
+        case COMENTARIO_EM_LINHA:
+            eat(COMENTARIO_EM_LINHA, vetor); DECLARA_PARAMETROS(vetor); break;
         case VARIAVEIS:
         case INICIO:
             break;
@@ -352,7 +372,9 @@ void BLOCO_VARIAVEIS(int *vetor) {
         case FUNCAO:
             break;
         case COMENTARIO_EM_BLOCO:
-            eat(COMENTARIO_EM_BLOCO, vetor); break;
+            eat(COMENTARIO_EM_BLOCO, vetor); BLOCO_VARIAVEIS(vetor); break;
+        case COMENTARIO_EM_LINHA:
+            eat(COMENTARIO_EM_LINHA, vetor); BLOCO_VARIAVEIS(vetor); break;
         default:
             if (token_posicao > tamanho_maximo_tokens) {
                 if (!erro_sintatico) {
@@ -576,13 +598,32 @@ void BLOCO_COMANDOS(int *vetor) {
     switch (vetor[token_posicao]) {
         case INICIO:
             eat(INICIO, vetor); LISTA_COMANDOS(vetor); eat(FIM, vetor); break;
+        case COMENTARIO_EM_BLOCO:
+            eat(COMENTARIO_EM_BLOCO, vetor); BLOCO_COMANDOS(vetor); break;
+        case COMENTARIO_EM_LINHA:
+            eat(COMENTARIO_EM_LINHA, vetor); BLOCO_COMANDOS(vetor); break;
         default:
+            if (token_posicao > tamanho_maximo_tokens) {
+                if (!erro_sintatico) {
+                    quebra_linha();
+                    printf("zERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    erro_sintatico = 1;
+                }
+            } else if (!erro_sintatico) {
+                quebra_linha();
+                printf("zzERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                erro_sintatico = 1;
+            }
             break;
     }
 }
 
 void LISTA_COMANDOS(int *vetor) {
     switch (vetor[token_posicao]) {
+        case COMENTARIO_EM_BLOCO:
+            eat(COMENTARIO_EM_BLOCO, vetor); LISTA_COMANDOS(vetor); break;
+        case COMENTARIO_EM_LINHA:
+            eat(COMENTARIO_EM_LINHA, vetor); LISTA_COMANDOS(vetor); break;
         case IDENTIFICADOR:
         case SE:
         case ENQUANTO:
@@ -590,28 +631,32 @@ void LISTA_COMANDOS(int *vetor) {
         case REPITA:
         case LEIA:
         case IMPRIMA:
-            COMANDOS(vetor); eat(PONTO_VIRGULA, vetor); LISTA_COMANDOS_X(vetor); 
+            COMANDOS(vetor); eat(PONTO_VIRGULA, vetor); 
+            if (vetor[token_posicao] != FIM) { // Verifique se não estamos no fim do bloco de comandos
+                LISTA_COMANDOS(vetor);
+            }
+            break;
+        case FIM:
             break;
         default:
-            if (token_posicao > tamanho_maximo_tokens) {
-                if (!erro_sintatico) {
-                    quebra_linha();
-                    printf("fERRO SINTATICO EM: ESPERADO: +, *, ), $"); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
-                    erro_sintatico = 1;
-                }
-            } else if (!erro_sintatico) {
+            if (!erro_sintatico) {
                 quebra_linha();
-                printf("ffERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao]));
+                printf("fERRO SINTATICO EM: %s ESPERADO: fim", tokenTypeToString(vetor[token_posicao]));
                 erro_sintatico = 1;
             }
             break;
     }
 }
 
+
 void LISTA_COMANDOS_X(int *vetor) {
     switch (vetor[token_posicao]) {
+        case COMENTARIO_EM_BLOCO:
+            eat(COMENTARIO_EM_BLOCO, vetor); LISTA_COMANDOS_X(vetor); break;
+        case COMENTARIO_EM_LINHA:
+            eat(COMENTARIO_EM_LINHA, vetor); LISTA_COMANDOS_X(vetor); break;
         case IDENTIFICADOR:
-            LISTA_COMANDOS(vetor); break;
+             break;
         default:
             break;
     }
