@@ -191,6 +191,7 @@ void VARIAVEL(TokenInfo *vetor);
 void EXPRITER(TokenInfo *vetor);
 
 void eat(int t, TokenInfo *vetor) {
+    //printf("%d a%d %d\n", ATE, vetor[token_posicao].token, t);
     if (vetor[token_posicao].token == t) {
         token_posicao++;
     } else if (!erro_sintatico) {
@@ -200,8 +201,10 @@ void eat(int t, TokenInfo *vetor) {
             erro_sintatico = 1;
             return;
         } else {
+            
             quebra_linha();
             printf("ssERRO SINTATICO EM: %s ESPERADO: %s", tokenTypeToString(vetor[token_posicao].token), tokenTypeToString(t));
+            printf("ERRO SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
             erro_sintatico = 1;
             return;
         }
@@ -518,6 +521,7 @@ void DECLARA_IDENTIFICADOR(TokenInfo *vetor) {
             } else if (!erro_sintatico) {
                 quebra_linha();
                 printf("bbERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao].token));
+                printf("ERRO SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
                 erro_sintatico = 1;
             }
             break;
@@ -548,6 +552,7 @@ void VETOR_MATRIZ(TokenInfo *vetor) {
             } else if (!erro_sintatico) {
                 quebra_linha();
                 printf("ccERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao].token));
+                printf("ERRO SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
                 erro_sintatico = 1;
             }
             break;
@@ -656,10 +661,14 @@ void LISTA_COMANDOS(TokenInfo *vetor) {
         case FIM:
             
         break;
+        case ATE: 
+        case SENAO:
+        break;
         default:
             if (!erro_sintatico) {
                 quebra_linha();
                 printf("fERRO SINTATICO EM: %s ESPERADO: fim", tokenTypeToString(vetor[token_posicao].token));
+                printf("ERRO SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
                 erro_sintatico = 1;
             }
             break;
@@ -683,7 +692,7 @@ void LISTA_COMANDOS_X(TokenInfo *vetor) {
 void COMANDOS(TokenInfo *vetor) {
     switch (vetor[token_posicao].token) {
         case IDENTIFICADOR:
-            eat(IDENTIFICADOR, vetor); COMANDOS_X(vetor); break;
+            eat(IDENTIFICADOR, vetor);  COMANDOS_X(vetor); break;
         case SE:
             eat(SE, vetor); EXPRESSAO(vetor); eat(ENTAO, vetor); LISTA_COMANDOS(vetor); COMANDOS_X2(vetor); break;
         case ENQUANTO:
@@ -718,6 +727,9 @@ void COMANDOS_X(TokenInfo *vetor) {
             eat(ABRE_PARENTESE, vetor); EXPRITER(vetor); eat(FECHA_PARENTESE, vetor); break;
         case ABRE_COLCHETE:
             eat(ABRE_COLCHETE, vetor); EXPRITER(vetor); eat(FECHA_COLCHETE, vetor); eat(ATRIBUICAO_ESQUERDA, vetor); EXPRESSAO(vetor); break;
+        case ATRIBUICAO_ESQUERDA:
+            //printf("ddd");
+            eat(ATRIBUICAO_ESQUERDA, vetor); EXPRESSAO(vetor); break;
         default:
             break;
     }
@@ -768,6 +780,7 @@ void EXPRESSAO(TokenInfo *vetor) {
             } else if (!erro_sintatico) {
                 quebra_linha();
                 printf("hhERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao].token));
+                printf("ERRO SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
                 erro_sintatico = 1;
             }
             break;
@@ -867,6 +880,7 @@ void TERMO(TokenInfo *vetor) {
             } else if (!erro_sintatico) {
                 quebra_linha();
                 printf("jjERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao].token));
+                printf("ERRO SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
                 erro_sintatico = 1;
             }
             break;
@@ -882,7 +896,10 @@ void TERMO_X(TokenInfo *vetor) {
         case DIV:
             eat(DIV, vetor); FATOR(vetor); TERMO_X(vetor); break;
         case E:
-            eat(E, vetor); FATOR(vetor); TERMO_X(vetor); break;        
+            eat(E, vetor); FATOR(vetor); TERMO_X(vetor); break;
+        case MENOS:
+        case MAIS:
+            break;     
         default:
             
             break;
@@ -897,6 +914,7 @@ void FATOR(TokenInfo *vetor) {
         case NAO:
             eat(NAO, vetor); FATOR(vetor); break;
         case NUMERO_INTEIRO:
+            //printf("%d %d", NUMERO_INTEIRO, vetor[token_posicao].token);
             eat(NUMERO_INTEIRO, vetor); break;
         case NUMERO_REAL:
             eat(NUMERO_REAL, vetor); break;
@@ -1067,19 +1085,11 @@ int main() {
                 armazenar_token(vetor, LOGICO, linha, (i+1));
                 printf("logico\n");
                 i += 6;
-            }else if (strncasecmp(&string[i], "vetor", 5) == 0) {
-                armazenar_token(vetor, VETOR, linha, (i+1));
-                printf("vetor\n");
-                i += 5;
-            }else if (strncasecmp(&string[i], "matriz", 6) == 0) {
-                armazenar_token(vetor, MATRIZ, linha, (i+1));
-                printf("matriz\n");
-                i += 6;
             }else if (strncasecmp(&string[i], "tipo", 4) == 0) {
                 armazenar_token(vetor, TIPO, linha, (i+1));
                 printf("tipo\n");
                 i += 4;
-            }            if (strncasecmp(&string[i], "funcao", 6) == 0) {
+            }else if (strncasecmp(&string[i], "funcao", 6) == 0) {
                armazenar_token(vetor, FUNCAO, linha, (i+1));
                printf("funcao\n");
                i += 6;
@@ -1087,11 +1097,7 @@ int main() {
                armazenar_token(vetor, PROCEDIMENTO, linha, (i+1));
                printf("procedimento\n");
                i += 12;
-            } else if (strncasecmp(&string[i], "se", 2) == 0) {
-               armazenar_token(vetor, SE, linha, (i+1));
-               printf("se\n");
-               i += 2;
-            } else if (strncasecmp(&string[i], "entao", 5) == 0) {
+            }  else if (strncasecmp(&string[i], "entao", 5) == 0) {
                armazenar_token(vetor, ENTAO, linha, (i+1));
                printf("entao\n");
                i += 5;
@@ -1224,7 +1230,7 @@ int main() {
                printf("+\n");
                i += 1;
             } else if (strncasecmp(&string[i], "-", 1) == 0) {
-               armazenar_token(vetor, MENOR, linha, (i+1));
+               armazenar_token(vetor, MENOS, linha, (i+1));
                printf("-\n");
                i += 1;
             } else if (strncasecmp(&string[i], "*", 1) == 0) {
@@ -1233,19 +1239,32 @@ int main() {
                i += 1;
             }else if(string[i]=='/' && string[i+1]=='/'){// reconhecimento de comentarios de linha
                 i+=1; //add dois por conta das duas barras
+                armazenar_token(vetor, COMENTARIO_EM_LINHA, linha, (i+1));
                 while (string[i] != '\n') {
                     i++;
                 }
                 printf("comentario em linha\n");
                 i++;
-                armazenar_token(vetor, COMENTARIO_EM_LINHA, linha, (i+1));
+                
             } else if (strncasecmp(&string[i], "/", 1) == 0) { // o reconhecimento da divisao deve ser abaixo do comentario de linha por questoes de precedencia
                armazenar_token(vetor, DIVISAO, linha, (i+1));
                printf("/\n");
                i += 1;
             }else if((strncmp(&string[i], " ", 1) == 0)||(strncmp(&string[i], "\n", 1) == 0)||(strncmp(&string[i], "\r", 1) == 0)||(strncmp(&string[i], "\0", 1) == 0)){
                 i++; //Para ignorar espacos e quebra de linha
-            } else if ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= 'A' && string[i] <= 'Z')||(string[i]=='_')) {//[a-zA-Z_][a-zA-Z0-9_]*
+            } else if ((strncasecmp(&string[i], "matriz", 6) == 0) && (string[i+6]=='[')) {
+                armazenar_token(vetor, MATRIZ, linha, (i+1));
+                printf("matriz\n");
+                i += 6;
+            } else if ((strncasecmp(&string[i], "vetor", 5) == 0) && (string[i+5]=='[')) {
+                armazenar_token(vetor, VETOR, linha, (i+1));
+                printf("vetor\n");
+                i += 5;
+            } else if ((strncasecmp(&string[i], "se", 2) == 0) && (string[i+2]==' ' || string[i+2]==';')) {
+               armazenar_token(vetor, SE, linha, (i+1));
+               printf("se\n");
+               i += 2;
+            }else if ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= 'A' && string[i] <= 'Z')||(string[i]=='_')) {//[a-zA-Z_][a-zA-Z0-9_]*
                 //printf("\n\n%d ", i);
                 //printf("Processando token: %d na linha: %d, coluna: %d\n", ALGORITMO, linha, i+1);
                 armazenar_token(vetor, IDENTIFICADOR, linha, (i+1));
@@ -1254,7 +1273,7 @@ int main() {
                     i++;
                 }
                 printf("Identificador\n");
-            } else if(string[i] >= '0' && string[i] <= '9'){//[0-9]+
+            }else if(string[i] >= '0' && string[i] <= '9'){//[0-9]+
                 armazenar_token(vetor, NUMERO_INTEIRO, linha, (i+1));
                 while (string[i] >= '0' && string[i] <= '9') {
                     i++;
