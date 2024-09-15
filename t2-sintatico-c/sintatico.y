@@ -102,11 +102,14 @@ declaracao_de_variaveis_loop: declaracao_de_variaveis declaracao_de_variaveis_lo
 declaracao_de_variaveis: tipo declaracao_de_variaveis_cerne SEMICOLON{ }
 ;
 
-declaracao_de_variaveis_cerne: multiply_loop IDENTIFIER expressao_loop ASSIGN expressao_de_atribuicao declaracao_de_variaveis_cerne_loop{ }
-               | multiply_loop IDENTIFIER expressao_loop declaracao_de_variaveis_cerne_loop {}
+declaracao_de_variaveis_cerne: multiply_loop IDENTIFIER expressao_loop igual_expr_atrib declaracao_de_variaveis_cerne_loop{ }
 ;
 
-declaracao_de_variaveis_cerne_loop: COMMA declaracao_de_variaveis_cerne declaracao_de_variaveis_cerne_loop{}
+igual_expr_atrib: ASSIGN expressao_de_atribuicao{}
+               | {}
+;
+
+declaracao_de_variaveis_cerne_loop: COMMA declaracao_de_variaveis_cerne {}
                | /*vazio*/{}
 ;
 expressao_loop: L_SQUARE_BRACKET expressao R_SQUARE_BRACKET expressao_loop{}
