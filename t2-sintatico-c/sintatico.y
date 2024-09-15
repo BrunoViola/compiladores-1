@@ -103,7 +103,7 @@ declaracao_de_variaveis_cerne: multiply_loop IDENTIFIER expressao_loop ASSIGN ex
                | multiply_loop IDENTIFIER expressao_loop declaracao_de_variaveis_cerne_loop {}
 ;
 
-declaracao_de_variaveis_cerne_loop: declaracao_de_variaveis_cerne COMMA{}
+declaracao_de_variaveis_cerne_loop: COMMA declaracao_de_variaveis_cerne declaracao_de_variaveis_cerne_loop{}
                | /*vazio*/{}
 ;
 expressao_loop: L_SQUARE_BRACKET expressao R_SQUARE_BRACKET expressao_loop{}
@@ -112,8 +112,34 @@ expressao_loop: L_SQUARE_BRACKET expressao R_SQUARE_BRACKET expressao_loop{}
 ;
 
 declaracao_de_prototipo: tipo multiply_loop IDENTIFIER parametros SEMICOLON{}
-
 ;
+
+parametros: L_PAREN parametros_cerne R_PAREN{}
+;
+
+parametros_cerne: tipo multiply_loop IDENTIFIER expressao_loop parametros_cerne_loop{}
+               | /*vazio*/{}
+;
+
+parametros_cerne_loop: COMMA parametros_cerne parametros_cerne_loop
+               | /*vazio*/{}
+;
+
+tipo: INT{}
+               | CHAR{}
+               | VOID{}
+;
+
+blocos: L_CURLY_BRACKET comandos R_CURLY_BRACKET{}
+;
+
+comandos: lista_de_comandos_loop{}
+;
+
+lista_de_comandos_loop: lista_de_comandos lista_de_comandos_loop{}
+               | /*vazio*/{}
+;
+
 %%
 int main(int argc, char** argv)
 {
