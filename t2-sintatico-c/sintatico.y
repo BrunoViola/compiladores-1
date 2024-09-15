@@ -88,7 +88,6 @@ declaracoes: NUMBER_SIGN DEFINE IDENTIFIER expressao { }
 ;
 
 funcao: tipo multiply_loop IDENTIFIER parametros L_CURLY_BRACKET declaracao_de_variaveis_loop comandos R_CURLY_BRACKET { }
-   | tipo multiply_loop IDENTIFIER parametros L_CURLY_BRACKET comandos R_CURLY_BRACKET { }
 ;
 
 multiply_loop: MULTIPLY multiply_loop   { }
@@ -120,14 +119,17 @@ expressao_loop: L_SQUARE_BRACKET expressao R_SQUARE_BRACKET expressao_loop{}
 declaracao_de_prototipo: tipo multiply_loop IDENTIFIER parametros SEMICOLON{}
 ;
 
-parametros: L_PAREN parametros_cerne R_PAREN{}
+parametros: L_PAREN parametros_controle R_PAREN{}
+;
+
+parametros_controle: parametros_cerne{}
+               | {}
 ;
 
 parametros_cerne: tipo multiply_loop IDENTIFIER expressao_loop parametros_cerne_loop{}
-               | /*vazio*/{}
 ;
 
-parametros_cerne_loop: COMMA parametros_cerne parametros_cerne_loop
+parametros_cerne_loop: COMMA parametros_cerne
                | /*vazio*/{}
 ;
 
