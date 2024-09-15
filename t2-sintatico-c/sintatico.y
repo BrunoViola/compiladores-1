@@ -6,7 +6,10 @@
  extern int line_num;
  extern int column_num;
  void yyerror(void *s);
- extern void print_quebra();  
+ extern void print_quebra(); 
+ extern char line_buffer[];
+ extern void SET_buffer(int total_lines);
+ 
  %}
 %token VOID
 %token INT
@@ -297,9 +300,19 @@ numero: NUM_INTEGER{}
 ;
 %%
 void yyerror(void *s){
+    SET_buffer(line_num);
+    if (yychar == 0){
+        printf("error:syntax:%d:%d: expected declaration or statement at end of input\n%s\n", line_num, column_num, line_buffer);
+    } 
+
 	printf("error:syntax:%d:%d: %s", line_num, column_num, yytext);
-	
-	exit(0);
+	printf("\n%s", line_buffer);  // Imprime o conteúdo da linha atual
+    for(int i = 0; i < column_num-1 ; i++) {
+		printf(" "); //Alinha o ^ com o erro
+	}
+    printf("^");
+    print_quebra();  // Função para limpeza ou manipulação adicional
+    exit(1);
 }
 
 int main(int argc, char** argv)

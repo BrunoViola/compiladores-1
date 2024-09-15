@@ -8,6 +8,16 @@ int line_num = 1;
 int column_num = 0;
 int first = 1;
 
+char line_buffer[1024];  // Buffer para armazenar o conteúdo da linha atual
+
+void add_to_line_buffer(char* text) {
+    strncat(line_buffer, text, sizeof(line_buffer) - strlen(line_buffer) - 1);
+}
+
+void clear_line_buffer() {
+    memset(line_buffer, 0, sizeof(line_buffer));
+}
+
 void update_position(const char *text);
 int get_initial_position(const char *text);
 void print_string_token(const char *text);
@@ -150,7 +160,7 @@ IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 {NUM_HEXA}                                  { update_position(yytext);  return NUM_HEXA; }
 {IDENTIFIER}                                { int init_col = get_initial_position(yytext); update_position(yytext);  if(column_num <= 255) { return IDENTIFIER; } else { print_quebra(); printf("error:lexical:%d:%d: identifier too long", line_num, init_col); return IDENTIFIER_TOO_LONG; } }
 \n                                          { line_num++; column_num = 0; }
-{WHITESPACE}                                { column_num++; }
+{WHITESPACE}                                { column_num++; clear_line_buffer();}
 {CHARACTER}                                 { update_position(yytext);   return CHARACTER; }
 {BARRAINVERTIDA}                            { update_position(yytext);  return BARRAINVERTIDA; }
 
@@ -159,6 +169,7 @@ IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 %%
 
 void update_position(const char *text) {
+    add_to_line_buffer(yytext);
     int len = strlen(text);
     for(int i=0; i<len; i++) {
         if(text[i] == '\n') {
@@ -173,12 +184,16 @@ void update_position(const char *text) {
 int get_initial_position(const char *text) {
     return column_num + 1;
 }
+void SET_buffer(int total_lines)
+{
+    //Seta o buffer para o inicio do arquivo
+    fseek(stdin, 0, SEEK_SET);
 
-void print_string_token(const char *text) {
-    char buffer[strlen(text) - 1];
-    strncpy(buffer, text + 1, strlen(text) - 2);
-    buffer[strlen(text) - 2] = '\0';
-    printf("STRING(%s)", buffer);
+    //For 
+    for(int i = 0; i < total_lines; i++)
+    {
+        fgets(line_buffer, 1000, stdin);
+    }
 }
 
 void verify_warning(const char * text){
