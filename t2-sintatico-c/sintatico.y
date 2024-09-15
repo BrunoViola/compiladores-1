@@ -297,7 +297,7 @@ numero: NUM_INTEGER{}
 ;
 %%
 void yyerror(void *s){
-	printf("error:syntax:%d:%d: %s\n", line_num, column_num, yytext);
+	printf("error:syntax:%d:%d: %s", line_num, column_num, yytext);
 	
 	exit(0);
 }

@@ -197,9 +197,9 @@ void verify_warning(const char * text){
         }else if(text[i-1]!='/' && text[i]=='/' && text[i+1]=='*'){
             count++;
             i++;
+
             
-            print_quebra();
-            if(count>1) printf("warning:%d:%d: '/*' within block comment", line, colum);
+            if(count>1){ print_quebra(); printf("warning:%d:%d: '/*' within block comment", line, colum);}
             colum++;
         } else if(text[i]=='*' && text[i+1]=='/'){
             count--;
