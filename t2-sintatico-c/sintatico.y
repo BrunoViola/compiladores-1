@@ -1,7 +1,10 @@
  %{
  #include <stdio.h>
+ #include <stdlib.h>
  extern int yylex();
  extern char* yytext;
+ extern int line_num;
+ extern int column_num;
  void yyerror(void *s);
  %}
 %token VOID
@@ -74,9 +77,9 @@
 
 %start programa
 %%
-Programa: declaracoes Programa
-    | funcao Programa
-    | /* vazio */ { printf("SUCCESSFUL COMPILATION."); return 0; }
+programa: declaracoes programa {}
+    | funcao programa {}
+    | /* vazio */ {}
 ; 
 
 declaracoes: NUMBER_SIGN DEFINE IDENTIFIER expressao { }
@@ -248,9 +251,54 @@ operadores_multiplicativa: MULTIPLY {}
 expressao_cast: expressao_unaria {}
                | L_PAREN tipo multiply_loop R_PAREN expressao_cast {}
 ;
+
+expressao_unaria: expressao_pos_fixa {}
+               | INC expressao_unaria {}
+               | DEC expressao_unaria {}
+               | operadores_unaria expressao_cast {}
+;
+
+operadores_unaria: BITWISE_AND {}
+               | MULTIPLY {}
+               | PLUS {}
+               | MINUS {}
+               | BITWISE_NOT {}
+               | NOT {}
+;
+
+expressao_pos_fixa: expressa_primaria {}
+               | expressao_pos_fixa L_SQUARE_BRACKET expressao R_SQUARE_BRACKET {}
+               | expressao_pos_fixa INC {}
+               | expressao_pos_fixa DEC {}
+               | expressao_pos_fixa L_PAREN expressao_de_atribuicao_loop R_PAREN {}
+;
+
+expressao_de_atribuicao_loop: expressao_de_atribuicao {}
+               | expressao_de_atribuicao COMMA expressao_de_atribuicao_loop
+               | {}
+;
+
+expressa_primaria: IDENTIFIER{}
+               | numero {}
+               | CHARACTER {}
+               | STRING {}
+               | L_PAREN expressao R_PAREN {}
+;
+
+numero: NUM_INTEGER{}
+               | NUM_HEXA {}
+               | NUM_OCTAL {}
+;
 %%
+void yyerror(void *s){
+	printf("error:syntax:%d:%d: %s\n", line_num, column_num, yytext);
+	
+	exit(0);
+}
+
 int main(int argc, char** argv)
 {
-   yyparse();    
+   yyparse();
+   printf("SUCCESSFUL COMPILATION.");
    return 0;
 }
