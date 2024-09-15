@@ -6,6 +6,7 @@
  extern int line_num;
  extern int column_num;
  void yyerror(void *s);
+ extern void print_quebra();  
  %}
 %token VOID
 %token INT
@@ -79,7 +80,7 @@
 %%
 programa: declaracoes programa {}
     | funcao programa {}
-    | /* vazio */ {}
+    | /* vazio*/ {}
 ; 
 
 declaracoes: NUMBER_SIGN DEFINE IDENTIFIER expressao { }
@@ -304,6 +305,7 @@ void yyerror(void *s){
 int main(int argc, char** argv)
 {
    yyparse();
+   print_quebra();
    printf("SUCCESSFUL COMPILATION.");
    return 0;
 }

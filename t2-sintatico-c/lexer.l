@@ -2,7 +2,7 @@
 %{
 #include <stdio.h>
 #include <string.h>
-#include <sintatico.tab.h>
+#include "sintatico.tab.h"
 
 int line_num = 1;
 int column_num = 0;
@@ -85,74 +85,74 @@ BARRAINVERTIDA          "\'""\\"[abfnrtv\\'"?0]"\'"
 IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 
 %%
-{VOID}                                      { update_position(yytext); print_quebra(); printf("VOID"); return VOID; }
-{INT}                                       { update_position(yytext); print_quebra(); printf("INT"); return INT; }
-{CHAR}                                      { update_position(yytext); print_quebra(); printf("CHAR"); return CHAR; }
-{RETURN}                                    { update_position(yytext); print_quebra(); printf("RETURN"); return RETURN; }
-{BREAK}                                     { update_position(yytext); print_quebra(); printf("BREAK"); return BREAK; }
-{SWITCH}                                    { update_position(yytext); print_quebra(); printf("SWITCH"); return SWITCH; }
-{CASE}                                      { update_position(yytext); print_quebra(); printf("CASE"); return CASE; }
-{DEFAULT}                                   { update_position(yytext); print_quebra(); printf("DEFAULT"); return DEFAULT; }
-{DO}                                        { update_position(yytext); print_quebra(); printf("DO"); return DO; }
-{WHILE}                                     { update_position(yytext); print_quebra(); printf("WHILE"); return WHILE; }
-{FOR}                                       { update_position(yytext); print_quebra(); printf("FOR"); return FOR; }
-{IF}                                        { update_position(yytext); print_quebra(); printf("IF"); return IF; }
-{ELSE}                                      { update_position(yytext); print_quebra(); printf("ELSE"); return ELSE; }
-{TYPEDEF}                                   { update_position(yytext); print_quebra(); printf("TYPEDEF"); return TYPEDEF; }
-{STRUCT}                                    { update_position(yytext); print_quebra(); printf("STRUCT"); return STRUCT; }
-{MULTIPLY}                                  { update_position(yytext); print_quebra(); printf("MULTIPLY"); return MULTIPLY; }
-{DIV}                                       { update_position(yytext); print_quebra(); printf("DIV"); return DIV; }
-{REMAINDER}                                 { update_position(yytext); print_quebra(); printf("REMAINDER"); return REMAINDER; }
-{SEMICOLON}                                 { update_position(yytext); print_quebra(); printf("SEMICOLON"); return SEMICOLON; }
-{COMMA}                                     { update_position(yytext); print_quebra(); printf("COMMA"); return COMMA; }
-{COLON}                                     { update_position(yytext); print_quebra(); printf("COLON"); return COLON; }
-{L_PAREN}                                   { update_position(yytext); print_quebra(); printf("L_PAREN"); return L_PAREN; }
-{R_PAREN}                                   { update_position(yytext); print_quebra(); printf("R_PAREN"); return R_PAREN; }
-{L_CURLY_BRACKET}                           { update_position(yytext); print_quebra(); printf("L_CURLY_BRACKET"); return L_CURLY_BRACKET; }
-{R_CURLY_BRACKET}                           { update_position(yytext); print_quebra(); printf("R_CURLY_BRACKET"); return R_CURLY_BRACKET; }
-{L_SQUARE_BRACKET}                          { update_position(yytext); print_quebra(); printf("L_SQUARE_BRACKET"); return L_SQUARE_BRACKET; }
-{R_SQUARE_BRACKET}                          { update_position(yytext); print_quebra(); printf("R_SQUARE_BRACKET"); return R_SQUARE_BRACKET; }
-{TERNARY_CONDITIONAL}                       { update_position(yytext); print_quebra(); printf("TERNARY_CONDITIONAL"); return TERNARY_CONDITIONAL; }
-{NUMBER_SIGN}                               { update_position(yytext); print_quebra(); printf("NUMBER_SIGN"); return NUMBER_SIGN; }
-{POINTER}                                   { update_position(yytext); print_quebra(); printf("POINTER"); return POINTER; }
-{PRINTF}                                    { update_position(yytext); print_quebra(); printf("PRINTF"); return PRINTF; }
-{SCANF}                                     { update_position(yytext); print_quebra(); printf("SCANF"); return SCANF; }
-{DEFINE}                                    { update_position(yytext); print_quebra(); printf("DEFINE"); return DEFINE; }
-{EXIT}                                      { update_position(yytext); print_quebra(); printf("EXIT"); return EXIT; }
-{STRING}                                    { update_position(yytext); print_quebra(); print_string_token(yytext); return STRING; }
+{VOID}                                      { update_position(yytext);  return VOID; }
+{INT}                                       { update_position(yytext);  return INT; }
+{CHAR}                                      { update_position(yytext);  return CHAR; }
+{RETURN}                                    { update_position(yytext);  return RETURN; }
+{BREAK}                                     { update_position(yytext);  return BREAK; }
+{SWITCH}                                    { update_position(yytext);  return SWITCH; }
+{CASE}                                      { update_position(yytext);  return CASE; }
+{DEFAULT}                                   { update_position(yytext);  return DEFAULT; }
+{DO}                                        { update_position(yytext);  return DO; }
+{WHILE}                                     { update_position(yytext);  return WHILE; }
+{FOR}                                       { update_position(yytext);  return FOR; }
+{IF}                                        { update_position(yytext);  return IF; }
+{ELSE}                                      { update_position(yytext);  return ELSE; }
+{TYPEDEF}                                   { update_position(yytext);  return TYPEDEF; }
+{STRUCT}                                    { update_position(yytext);  return STRUCT; }
+{MULTIPLY}                                  { update_position(yytext);  return MULTIPLY; }
+{DIV}                                       { update_position(yytext);  return DIV; }
+{REMAINDER}                                 { update_position(yytext);  return REMAINDER; }
+{SEMICOLON}                                 { update_position(yytext);  return SEMICOLON; }
+{COMMA}                                     { update_position(yytext);  return COMMA; }
+{COLON}                                     { update_position(yytext);  return COLON; }
+{L_PAREN}                                   { update_position(yytext);  return L_PAREN; }
+{R_PAREN}                                   { update_position(yytext);  return R_PAREN; }
+{L_CURLY_BRACKET}                           { update_position(yytext);  return L_CURLY_BRACKET; }
+{R_CURLY_BRACKET}                           { update_position(yytext);  return R_CURLY_BRACKET; }
+{L_SQUARE_BRACKET}                          { update_position(yytext);  return L_SQUARE_BRACKET; }
+{R_SQUARE_BRACKET}                          { update_position(yytext);  return R_SQUARE_BRACKET; }
+{TERNARY_CONDITIONAL}                       { update_position(yytext);  return TERNARY_CONDITIONAL; }
+{NUMBER_SIGN}                               { update_position(yytext);  return NUMBER_SIGN; }
+{POINTER}                                   { update_position(yytext);  return POINTER; }
+{PRINTF}                                    { update_position(yytext);  return PRINTF; }
+{SCANF}                                     { update_position(yytext);  return SCANF; }
+{DEFINE}                                    { update_position(yytext);  return DEFINE; }
+{EXIT}                                      { update_position(yytext);  return EXIT; }
+{STRING}                                    { update_position(yytext);  return STRING; }
 {TERMINATED_COMMENT}                        { update_position(yytext); return TERMINATED_COMMENT; }
-{COMENTARIO_EM_BLOCO}                       { verify_warning(yytext); update_position(yytext); return COMENTARIO_EM_BLOCO; }
+{COMENTARIO_EM_BLOCO}                       { verify_warning(yytext); update_position(yytext);  }
 {UNTERMINATED_COMMENT}                      { int init_col = get_initial_position(yytext); print_quebra(); printf("error:lexical:%d:%d: unterminated comment", line_num, init_col); update_position(yytext); return UNTERMINATED_COMMENT; }
-{PLUS}                                      { update_position(yytext); print_quebra(); printf("PLUS"); return PLUS; }
-{MINUS}                                     { update_position(yytext); print_quebra(); printf("MINUS"); return MINUS; }
-{INC}                                       { update_position(yytext); print_quebra(); printf("INC"); return INC; }
-{DEC}                                       { update_position(yytext); print_quebra(); printf("DEC"); return DEC; }
-{BITWISE_AND}                               { update_position(yytext); print_quebra(); printf("BITWISE_AND"); return BITWISE_AND; }
-{BITWISE_OR}                                { update_position(yytext); print_quebra(); printf("BITWISE_OR"); return BITWISE_OR; }
-{BITWISE_NOT}                               { update_position(yytext); print_quebra(); printf("BITWISE_NOT"); return BITWISE_NOT; }
-{BITWISE_XOR}                               { update_position(yytext); print_quebra(); printf("BITWISE_XOR"); return BITWISE_XOR; }
-{NOT}                                       { update_position(yytext); print_quebra(); printf("NOT"); return NOT; }
-{LOGICAL_AND}                               { update_position(yytext); print_quebra(); printf("LOGICAL_AND"); return LOGICAL_AND; }
-{LOGICAL_OR}                                { update_position(yytext); print_quebra(); printf("LOGICAL_OR"); return LOGICAL_OR; }
-{EQUAL}                                     { update_position(yytext); print_quebra(); printf("EQUAL"); return EQUAL; }
-{NOT_EQUAL}                                 { update_position(yytext); print_quebra(); printf("NOT_EQUAL"); return NOT_EQUAL; }
-{LESS_THAN}                                 { update_position(yytext); print_quebra(); printf("LESS_THAN"); return LESS_THAN; }
-{GREATER_THAN}                              { update_position(yytext); print_quebra(); printf("GREATER_THAN"); return GREATER_THAN; }
-{LESS_EQUAL}                                { update_position(yytext); print_quebra(); printf("LESS_EQUAL"); return LESS_EQUAL; }
-{GREATER_EQUAL}                             { update_position(yytext); print_quebra(); printf("GREATER_EQUAL"); return GREATER_EQUAL; }
-{L_SHIFT}                                   { update_position(yytext); print_quebra(); printf("L_SHIFT"); return L_SHIFT; }
-{R_SHIFT}                                   { update_position(yytext); print_quebra(); printf("R_SHIFT"); return R_SHIFT; }
-{ASSIGN}                                    { update_position(yytext); print_quebra(); printf("ASSIGN"); return ASSIGN; }
-{ADD_ASSIGN}                                { update_position(yytext); print_quebra(); printf("ADD_ASSIGN"); return ADD_ASSIGN; }
-{MINUS_ASSIGN}                              { update_position(yytext); print_quebra(); printf("MINUS_ASSIGN"); return MINUS_ASSIGN; }
-{NUM_OCTAL}                                 { update_position(yytext); print_quebra(); printf("NUM_OCTAL(%s)", yytext); return NUM_OCTAL; }
-{NUM_INTEGER}                               { update_position(yytext); print_quebra(); printf("NUM_INTEGER(%s)", yytext); return NUM_INTEGER; }
-{NUM_HEXA}                                  { update_position(yytext); print_quebra(); printf("NUM_HEXA(%s)", yytext); return NUM_HEXA; }
-{IDENTIFIER}                                { int init_col = get_initial_position(yytext); update_position(yytext); print_quebra(); if(column_num <= 255) { printf("IDENTIFIER(%s)", yytext); return IDENTIFIER; } else { printf("error:lexical:%d:%d: identifier too long", line_num, init_col); return IDENTIFIER_TOO_LONG; } }
+{PLUS}                                      { update_position(yytext);  return PLUS; }
+{MINUS}                                     { update_position(yytext);  return MINUS; }
+{INC}                                       { update_position(yytext);  return INC; }
+{DEC}                                       { update_position(yytext);  return DEC; }
+{BITWISE_AND}                               { update_position(yytext);  return BITWISE_AND; }
+{BITWISE_OR}                                { update_position(yytext);  return BITWISE_OR; }
+{BITWISE_NOT}                               { update_position(yytext);  return BITWISE_NOT; }
+{BITWISE_XOR}                               { update_position(yytext);  return BITWISE_XOR; }
+{NOT}                                       { update_position(yytext);  return NOT; }
+{LOGICAL_AND}                               { update_position(yytext);  return LOGICAL_AND; }
+{LOGICAL_OR}                                { update_position(yytext);  return LOGICAL_OR; }
+{EQUAL}                                     { update_position(yytext);  return EQUAL; }
+{NOT_EQUAL}                                 { update_position(yytext);  return NOT_EQUAL; }
+{LESS_THAN}                                 { update_position(yytext);  return LESS_THAN; }
+{GREATER_THAN}                              { update_position(yytext);  return GREATER_THAN; }
+{LESS_EQUAL}                                { update_position(yytext);  return LESS_EQUAL; }
+{GREATER_EQUAL}                             { update_position(yytext);  return GREATER_EQUAL; }
+{L_SHIFT}                                   { update_position(yytext);  return L_SHIFT; }
+{R_SHIFT}                                   { update_position(yytext);  return R_SHIFT; }
+{ASSIGN}                                    { update_position(yytext);  return ASSIGN; }
+{ADD_ASSIGN}                                { update_position(yytext);  return ADD_ASSIGN; }
+{MINUS_ASSIGN}                              { update_position(yytext);  return MINUS_ASSIGN; }
+{NUM_OCTAL}                                 { update_position(yytext);  return NUM_OCTAL; }
+{NUM_INTEGER}                               { update_position(yytext);  return NUM_INTEGER; }
+{NUM_HEXA}                                  { update_position(yytext);  return NUM_HEXA; }
+{IDENTIFIER}                                { int init_col = get_initial_position(yytext); update_position(yytext);  if(column_num <= 255) { return IDENTIFIER; } else { print_quebra(); printf("error:lexical:%d:%d: identifier too long", line_num, init_col); return IDENTIFIER_TOO_LONG; } }
 \n                                          { line_num++; column_num = 0; }
 {WHITESPACE}                                { column_num++; }
-{CHARACTER}                                 { update_position(yytext); print_quebra(); printf("CHARACTER(%c)", yytext[1]); return CHARACTER; }
-{BARRAINVERTIDA}                            { update_position(yytext); print_quebra(); printf("CHARACTER(%c%c)", yytext[1], yytext[2]); return BARRAINVERTIDA; }
+{CHARACTER}                                 { update_position(yytext);   return CHARACTER; }
+{BARRAINVERTIDA}                            { update_position(yytext);  return BARRAINVERTIDA; }
 
 .                                           { update_position(yytext);print_quebra(); printf("error:lexical:%d:%d: %s", line_num, column_num, yytext); }
 
@@ -197,7 +197,9 @@ void verify_warning(const char * text){
         }else if(text[i-1]!='/' && text[i]=='/' && text[i+1]=='*'){
             count++;
             i++;
-            if(count>1) printf("\nwarning:%d:%d: '/*' within block comment", line, colum);
+            
+            print_quebra();
+            if(count>1) printf("warning:%d:%d: '/*' within block comment", line, colum);
             colum++;
         } else if(text[i]=='*' && text[i+1]=='/'){
             count--;
@@ -212,9 +214,4 @@ void print_quebra(){
     }else{
         first = 0;
     }
-}
-
-int main(void) {
-    yylex();
-    return 0;
 }
