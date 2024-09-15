@@ -130,7 +130,7 @@ tipo: INT{}
                | VOID{}
 ;
 
-blocos: L_CURLY_BRACKET comandos R_CURLY_BRACKET{}
+bloco: L_CURLY_BRACKET comandos R_CURLY_BRACKET{}
 ;
 
 comandos: lista_de_comandos_loop{}
@@ -140,6 +140,114 @@ lista_de_comandos_loop: lista_de_comandos lista_de_comandos_loop{}
                | /*vazio*/{}
 ;
 
+lista_de_comandos: DO bloco WHILE L_PAREN expressao R_PAREN SEMICOLON {}
+               | IF L_PAREN expressao R_PAREN bloco complem_else_bloco {}
+               | WHILE L_PAREN expressao R_PAREN bloco {}
+               | FOR L_PAREN complem_expressao SEMICOLON complem_expressao SEMICOLON complem_expressao R_PAREN bloco {}
+               | PRINTF L_PAREN STRING complem_comma_expr R_PAREN SEMICOLON {}
+               | SCANF L_PAREN STRING COMMA BITWISE_AND IDENTIFIER R_PAREN SEMICOLON {}
+               | EXIT L_PAREN expressao R_PAREN SEMICOLON {} 
+               | RETURN complem_expressao SEMICOLON {}
+               | expressao SEMICOLON {}
+               | SEMICOLON {}
+               | bloco {}
+;
+
+complem_else_bloco: ELSE bloco {}
+               | /*vazio*/ {}
+;
+
+complem_expressao: expressao {}
+               | /*vazio*/ {}
+;
+
+complem_comma_expr: COMMA expressao {}
+               |  {}
+;
+
+expressao: expressao_de_atribuicao {}
+               | expressao COMMA expressao_de_atribuicao {}
+;
+
+expressao_de_atribuicao: expressao_condicional {}
+               |expressao_unaria operadores expressao_de_atribuicao {}
+;
+
+operadores: ASSIGN{}
+               | ADD_ASSIGN {}
+               | MINUS_ASSIGN {}
+;
+
+expressao_condicional: expressao_or_logico {}
+               | expressao_or_logico TERNARY_CONDITIONAL expressao COLON expressao_condicional {}
+;
+
+expressao_or_logico: expressao_and_logico {}
+               | expressao_or_logico LOGICAL_OR expressao_and_logico {}
+;
+
+expressao_and_logico: expressao_or {}
+               | expressao_and_logico LOGICAL_AND expressao_or {}
+;
+
+expressao_or: expressao_xor {}
+               | expressao_or BITWISE_OR expressao_xor {}
+;
+
+expressao_xor: expressao_and {}
+               | expressao_xor BITWISE_XOR expressao_and{}
+;
+
+expressao_and: expressao_de_igualdade {}
+               | expressao_and BITWISE_AND expressao_de_igualdade {}
+;
+
+expressao_de_igualdade: expressao_relacional {}
+               | expressao_de_igualdade equal_or_not_equal expressao_relacional {}
+;
+
+equal_or_not_equal: EQUAL {}
+               | NOT_EQUAL {}
+;
+
+expressao_relacional: expressao_shift {}
+               | expressao_relacional comparadores expressao_shift {}
+;
+
+comparadores: LESS_THAN {}
+               | LESS_EQUAL {}
+               | GREATER_THAN {}
+               | GREATER_EQUAL {}
+;
+
+expressao_shift: expressao_aditiva {}
+               | expressao_shift opshifts expressao_aditiva {}
+;
+
+opshifts: R_SHIFT {}
+               | L_SHIFT {}
+;
+
+expressao_aditiva: expressao_multiplicativa {}
+               | expressao_aditiva minus_or_plus expressao_multiplicativa {}
+;
+
+minus_or_plus: MINUS {}
+               | PLUS {}
+;
+
+expressao_multiplicativa: expressao_cast {}
+               | expressao_multiplicativa operadores_multiplicativa expressao_cast {}
+;
+
+operadores_multiplicativa: MULTIPLY {}
+               | DIV {}
+               | REMAINDER {}
+;
+
+expressao_cast: expressao_unaria {}
+               | L_PAREN tipo multiply_loop R_PAREN expressao_cast {}
+;
 %%
 int main(int argc, char** argv)
 {
