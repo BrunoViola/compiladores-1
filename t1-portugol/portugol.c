@@ -646,14 +646,14 @@ void LISTA_COMANDOS(TokenInfo *vetor) {
             eat(COMENTARIO_EM_BLOCO, vetor); LISTA_COMANDOS(vetor); break;
         case COMENTARIO_EM_LINHA:
             eat(COMENTARIO_EM_LINHA, vetor); LISTA_COMANDOS(vetor); break;
-        case IDENTIFICADOR:
         case SE:
+        case IDENTIFICADOR:
         case ENQUANTO:
         case PARA:
         case REPITA:
         case LEIA:
         case IMPRIMA:
-            COMANDOS(vetor); eat(PONTO_VIRGULA, vetor); 
+            COMANDOS(vetor); printf("b"); eat(PONTO_VIRGULA, vetor); 
             if (vetor[token_posicao].token != FIM) { // Verifique se não estamos no fim do bloco de comandos
                 LISTA_COMANDOS(vetor);
             }
@@ -692,8 +692,9 @@ void LISTA_COMANDOS_X(TokenInfo *vetor) {
 void COMANDOS(TokenInfo *vetor) {
     switch (vetor[token_posicao].token) {
         case IDENTIFICADOR:
-            eat(IDENTIFICADOR, vetor);  COMANDOS_X(vetor); break;
+            printf("l:%d c:%d",vetor[token_posicao].linha, vetor[token_posicao].coluna); eat(IDENTIFICADOR, vetor);  COMANDOS_X(vetor); break;
         case SE:
+            printf("\neh   %s", tokenTypeToString(vetor[token_posicao].token));
             eat(SE, vetor); EXPRESSAO(vetor); eat(ENTAO, vetor); LISTA_COMANDOS(vetor); COMANDOS_X2(vetor); break;
         case ENQUANTO:
             eat(ENQUANTO, vetor); EXPRESSAO(vetor); eat(FACA, vetor); LISTA_COMANDOS(vetor); eat(FIM, vetor); eat(ENQUANTO, vetor); break;
@@ -811,6 +812,8 @@ void EXPRESSAO_SIMPLES(TokenInfo *vetor) {
         case MAIS:
         case MENOS:
         case OU:
+            EXPRESSAO_SIMPLES_X(vetor);
+        break;
         case ABRE_PARENTESE:
         case NAO:
         case NUMERO_INTEIRO:
@@ -944,6 +947,7 @@ void FATOR(TokenInfo *vetor) {
             } else if (!erro_sintatico) {
                 quebra_linha();
                 printf("kkERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao].token));
+                printf("ERRO SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
                 erro_sintatico = 1;
             }
             break;
@@ -1260,7 +1264,7 @@ int main() {
                 armazenar_token(vetor, VETOR, linha, (i+1));
                 printf("vetor\n");
                 i += 5;
-            } else if ((strncasecmp(&string[i], "se", 2) == 0) && (string[i+2]==' ' || string[i+2]==';')) {
+            } else if ((strncasecmp(&string[i], "se", 2) == 0) && (string[i+2]==' ' || string[i+2]==';'||string[i+2]=='(')) {
                armazenar_token(vetor, SE, linha, (i+1));
                printf("se\n");
                i += 2;
