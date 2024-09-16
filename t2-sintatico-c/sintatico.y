@@ -145,7 +145,7 @@ tipo: INT{}
 bloco: L_CURLY_BRACKET comandos R_CURLY_BRACKET{}
 ;
 
-comandos: lista_de_comandos_loop{}
+comandos: lista_de_comandos lista_de_comandos_loop{}
 ;
 
 lista_de_comandos_loop: lista_de_comandos lista_de_comandos_loop{}
@@ -306,12 +306,12 @@ void yyerror(void *s){
     } 
 
 	printf("error:syntax:%d:%d: %s", line_num, column_num, yytext);
-	printf("\n%s", line_buffer);  // Imprime o conteúdo da linha atual
+	printf("\n%s", line_buffer);  // aqui eh onde eu imprimo a linha na qual o erro se localiza
     for(int i = 0; i < column_num-1 ; i++) {
-		printf(" "); //Alinha o ^ com o erro
+		printf(" ");
 	}
     printf("^");
-    print_quebra();  // Função para limpeza ou manipulação adicional
+    print_quebra();
     exit(1);
 }
 
