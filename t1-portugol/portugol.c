@@ -189,6 +189,7 @@ void TERMO_X(TokenInfo *vetor);
 void FATOR(TokenInfo *vetor);
 void VARIAVEL(TokenInfo *vetor);
 void EXPRITER(TokenInfo *vetor);
+void EXPRITER_X(TokenInfo *vetor);
 
 void eat(int t, TokenInfo *vetor) {
     //printf("%d a%d %d\n", ATE, vetor[token_posicao].token, t);
@@ -994,12 +995,7 @@ void EXPRITER(TokenInfo *vetor) {
         case FALSO:
         case STRING:
         case IDENTIFICADOR:
-        verifica = token_posicao + 1;
-            if(vetor[verifica].token==VIRGULA){
-                EXPRESSAO(vetor); eat(VIRGULA, vetor); EXPRITER(vetor);
-            }else{
-                EXPRESSAO(vetor);
-            } break;
+            EXPRESSAO(vetor); EXPRITER_X(vetor); break;
 
         default:
             if (token_posicao > local) {
@@ -1013,6 +1009,16 @@ void EXPRITER(TokenInfo *vetor) {
                 printf("mmERRO SINTATICO EM: %s ESPERADO: +, *, ), $", tokenTypeToString(vetor[token_posicao].token));
                 erro_sintatico = 1;
             }
+            break;
+    }
+}
+
+void EXPRITER_X(TokenInfo *vetor){
+    switch (vetor[token_posicao].token) {
+        case VIRGULA:
+            eat(VIRGULA, vetor); EXPRITER(vetor); break;     
+        default:
+            
             break;
     }
 }
