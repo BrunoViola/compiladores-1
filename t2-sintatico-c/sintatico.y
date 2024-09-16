@@ -1,6 +1,7 @@
  %{
  #include <stdio.h>
  #include <stdlib.h>
+ #include <string.h>
  extern int yylex();
  extern char* yytext;
  extern int line_num;
@@ -8,7 +9,7 @@
  void yyerror(void *s);
  extern void print_quebra(); 
  extern char line_buffer[];
- extern void SET_buffer(int total_lines);
+ extern void set_buffer(int total_lines);
  
  %}
 %token VOID
@@ -91,7 +92,7 @@ declaracoes: NUMBER_SIGN DEFINE IDENTIFIER expressao { }
    | declaracao_de_prototipo { }
 ;
 
-funcao: tipo multiply_loop IDENTIFIER parametros L_CURLY_BRACKET declaracao_de_variaveis_loop comandos R_CURLY_BRACKET { }
+funcao: tipo multiply_loop IDENTIFIER parametros L_CURLY_BRACKET p_coment_linha declaracao_de_variaveis_loop comandos R_CURLY_BRACKET p_coment_linha{ }
 ;
 
 multiply_loop: MULTIPLY multiply_loop   { }
@@ -102,7 +103,7 @@ declaracao_de_variaveis_loop: declaracao_de_variaveis declaracao_de_variaveis_lo
                | /* vazio */{}
 ;
 
-declaracao_de_variaveis: tipo declaracao_de_variaveis_cerne SEMICOLON{ }
+declaracao_de_variaveis: tipo declaracao_de_variaveis_cerne SEMICOLON p_coment_linha{ }
 ;
 
 declaracao_de_variaveis_cerne: multiply_loop IDENTIFIER expressao_loop igual_expr_atrib declaracao_de_variaveis_cerne_loop{ }
@@ -120,10 +121,10 @@ expressao_loop: L_SQUARE_BRACKET expressao R_SQUARE_BRACKET expressao_loop{}
 
 ;
 
-declaracao_de_prototipo: tipo multiply_loop IDENTIFIER parametros SEMICOLON{}
+declaracao_de_prototipo: tipo multiply_loop IDENTIFIER parametros SEMICOLON p_coment_linha{}
 ;
 
-parametros: L_PAREN parametros_controle R_PAREN{}
+parametros: L_PAREN parametros_controle R_PAREN {}
 ;
 
 parametros_controle: parametros_cerne{}
@@ -142,7 +143,7 @@ tipo: INT{}
                | VOID{}
 ;
 
-bloco: L_CURLY_BRACKET comandos R_CURLY_BRACKET{}
+bloco: L_CURLY_BRACKET p_coment_linha comandos R_CURLY_BRACKET p_coment_linha{}
 ;
 
 comandos: lista_de_comandos lista_de_comandos_loop{}
@@ -156,12 +157,12 @@ lista_de_comandos: DO bloco WHILE L_PAREN expressao R_PAREN SEMICOLON {}
                | IF L_PAREN expressao R_PAREN bloco complem_else_bloco {}
                | WHILE L_PAREN expressao R_PAREN bloco {}
                | FOR L_PAREN complem_expressao SEMICOLON complem_expressao SEMICOLON complem_expressao R_PAREN bloco {}
-               | PRINTF L_PAREN STRING complem_comma_expr R_PAREN SEMICOLON {}
-               | SCANF L_PAREN STRING COMMA BITWISE_AND IDENTIFIER R_PAREN SEMICOLON {}
-               | EXIT L_PAREN expressao R_PAREN SEMICOLON {} 
-               | RETURN complem_expressao SEMICOLON {}
-               | expressao SEMICOLON {}
-               | SEMICOLON {}
+               | PRINTF L_PAREN STRING complem_comma_expr R_PAREN SEMICOLON p_coment_linha{}
+               | SCANF L_PAREN STRING COMMA BITWISE_AND IDENTIFIER R_PAREN SEMICOLON p_coment_linha{}
+               | EXIT L_PAREN expressao R_PAREN SEMICOLON p_coment_linha{} 
+               | RETURN complem_expressao SEMICOLON p_coment_linha{}
+               | expressao SEMICOLON p_coment_linha{}
+               | SEMICOLON p_coment_linha{}
                | bloco {}
 ;
 
@@ -298,20 +299,46 @@ numero: NUM_INTEGER{}
                | NUM_HEXA {}
                | NUM_OCTAL {}
 ;
+
+p_coment_linha: TERMINATED_COMMENT{}
+                | {}
+;
 %%
 void yyerror(void *s){
-    SET_buffer(line_num);
-    if (yychar == 0){
-        printf("error:syntax:%d:%d: expected declaration or statement at end of input\n%s\n", line_num, column_num, line_buffer);
-    } 
+    set_buffer(line_num);
+    char *comment_start = strstr(line_buffer, "//");  // Localiza o primeiro "//"
+    int adjusted_column = column_num;
+    int end_input = 0;
 
-	printf("error:syntax:%d:%d: %s", line_num, column_num, yytext);
+    if (comment_start != NULL) {
+        adjusted_column = (comment_start - line_buffer) + 1;  // Ajusta para o primeiro '/'
+        end_input = 1;
+    }
+    if (yychar == 0 || end_input){
+        if(comment_start == NULL) adjusted_column++;
+        printf("error:syntax:%d:%d: expected declaration or statement at end of input\n%s", line_num, adjusted_column, line_buffer);
+        // indica por meio de `^` a posicao do erro
+        if (strchr(line_buffer, '\n') == NULL){
+            printf("\n");
+        }
+        for (int i = 0; i < adjusted_column - 1; i++) {
+            printf(" ");
+        }
+        
+        printf("^");
+        exit(1);
+    } 
+	adjusted_column -= strlen(yytext) - 1;
+    printf("error:syntax:%d:%d: %s", line_num, adjusted_column, yytext);
 	printf("\n%s", line_buffer);  // aqui eh onde eu imprimo a linha na qual o erro se localiza
-    for(int i = 0; i < column_num-1 ; i++) {
-		printf(" ");
-	}
+    // indica por meio de `^` a posicao do erro
+    if (strchr(line_buffer, '\n') == NULL){
+            printf("\n");
+    }
+    for (int i = 0; i < adjusted_column - 1; i++) {
+        printf(" ");
+    }
     printf("^");
-    print_quebra();
     exit(1);
 }
 
