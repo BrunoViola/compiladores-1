@@ -1059,9 +1059,6 @@ int main() {
             //printf("\n i = %d ", i);
 
             if(strncasecmp(&string[i], "algoritmo", 9) == 0) {
-                printf("Processando token: %d na linha: %d, coluna: %d\n", ALGORITMO, linha, i+1);
-
-                
                 printf("algoritmo\n");
                 i += 9;
                 armazenar_token(vetor, ALGORITMO, linha, (i+1));
@@ -1249,7 +1246,7 @@ int main() {
                i += 1;
             }else if(string[i]=='/' && string[i+1]=='/'){// reconhecimento de comentarios de linha
                 i+=1; //add dois por conta das duas barras
-                armazenar_token(vetor, COMENTARIO_EM_LINHA, linha, (i+1));
+                //armazenar_token(vetor, COMENTARIO_EM_LINHA, linha, (i+1));
                 while (string[i] != '\n') {
                     i++;
                 }
@@ -1334,7 +1331,7 @@ int main() {
                         return 0;
                     }  
                 }
-                armazenar_token(vetor, COMENTARIO_EM_BLOCO, linha, (i+1));
+                //armazenar_token(vetor, COMENTARIO_EM_BLOCO, linha, (i+1));
             }else {
                 for(int i=0; i<=10; i++){
         //printf("ERRO LEXICO. Linha: %d Coluna: %d -> '%c'", vetor[i].linha, vetor[i].coluna, vetor[i].token);
