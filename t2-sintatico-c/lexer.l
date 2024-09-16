@@ -161,8 +161,9 @@ IDENTIFIER              ([a-z]|[A-Z]|"_")+[a-zA-Z0-9_]*
 %%
 
 void update_position(const char *text) {
+    int i;
     int len = strlen(text);
-    for(int i=0; i<len; i++) {
+    for(i=0; i<len; i++) {
         if(text[i] == '\n') {
             line_num++;
             column_num = 0;
@@ -178,9 +179,10 @@ int get_initial_position(const char *text) {
 
 void set_buffer(int total_lines)
 {
+    int i;
     fseek(stdin, 0, SEEK_SET); //vamos apontar para o inicio
 
-    for(int i = 0; i < total_lines; i++)
+    for(i = 0; i < total_lines; i++)
     {
         fgets(line_buffer, 1000, stdin);
     }
@@ -191,7 +193,8 @@ void verify_warning(const char * text){
     int count = 0;
     int colum=0;
     int line = line_num;
-    for(int i=0; i<len; i++){
+    int i;
+    for(i=0; i<len; i++){
         colum++;
         if(text[i]=='\n'){
             colum = 0;

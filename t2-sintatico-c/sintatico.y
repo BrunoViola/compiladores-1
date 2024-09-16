@@ -309,6 +309,7 @@ void yyerror(void *s){
     char *comment_start = strstr(line_buffer, "//");  // Localiza o primeiro "//"
     int adjusted_column = column_num;
     int end_input = 0;
+    int i = 0;
 
     if (comment_start != NULL) {
         adjusted_column = (comment_start - line_buffer) + 1;  // Ajusta para o primeiro '/'
@@ -321,7 +322,7 @@ void yyerror(void *s){
         if (strchr(line_buffer, '\n') == NULL){
             printf("\n");
         }
-        for (int i = 0; i < adjusted_column - 1; i++) {
+        for (i = 0; i < adjusted_column - 1; i++) {
             printf(" ");
         }
         
@@ -335,7 +336,7 @@ void yyerror(void *s){
     if (strchr(line_buffer, '\n') == NULL){
             printf("\n");
     }
-    for (int i = 0; i < adjusted_column - 1; i++) {
+    for (i = 0; i < adjusted_column - 1; i++) {
         printf(" ");
     }
     printf("^");
