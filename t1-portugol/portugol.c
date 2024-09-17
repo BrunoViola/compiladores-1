@@ -67,6 +67,7 @@ typedef struct {
     int token;         // ID do token (tipo do token)
     int linha;         // Linha onde o token foi encontrado
     int coluna;        // Coluna onde o token foi encontrado
+    char palavra[300];
 } TokenInfo;
 
 //Funcao utilziada para converter o valor do enum em uma string
@@ -140,14 +141,20 @@ int local;
 int primeira_linha;
 
 void armazenar_token(TokenInfo *vetor, int token, int linha, int coluna) {
-    //printf("Armazenando token: %d na posição: %d (linha: %d, coluna: %d)\n", token, local, linha, coluna); // Debug
     vetor[local].token = token;
     vetor[local].linha = linha;
     vetor[local].coluna = coluna;
-    //printf("ssd LEXICO. Linha: %d Coluna: %d -> '%d'", vetor[local].linha, vetor[local].coluna, vetor[local].token);
-    local++;
     
+    local++;
 }   
+
+void imprimir_erro_sintatico(TokenInfo *vetor, int token_posicao){
+    if(vetor[token_posicao].token == IDENTIFICADOR){
+        printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, vetor[token_posicao].palavra);
+    }else{
+        printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+    }
+}
 
 // ============================
 // ===== INICIO SINTATICO =====
@@ -192,11 +199,11 @@ void eat(int t, TokenInfo *vetor) {
     } else if (!erro_sintatico) {
         if (token_posicao > local) {
             
-            printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+            imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
             erro_sintatico = 1;
             return;
         } else {
-            printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+            imprimir_erro_sintatico(vetor, token_posicao);
             erro_sintatico = 1;
             return;
         }
@@ -206,7 +213,7 @@ void eat(int t, TokenInfo *vetor) {
 void PROGRAMA(TokenInfo *vetor) {
     if(local==-1){
         
-        printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+        imprimir_erro_sintatico(vetor, token_posicao);
         erro_sintatico = 1;
         return;
     }
@@ -220,11 +227,11 @@ void PROGRAMA(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             return;
@@ -246,11 +253,11 @@ void PROCEDIMENTO_FUNCAO(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -268,11 +275,11 @@ void DECLARA_PROCEDIMENTO(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -291,11 +298,11 @@ void DECLARA_FUNCAO(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -317,11 +324,11 @@ void PARAMETROS(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -352,11 +359,11 @@ void DECLARA_PARAMETROS(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -380,11 +387,11 @@ void BLOCO_VARIAVEIS(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -408,11 +415,11 @@ void DECLARACOES(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -444,11 +451,11 @@ void DECLARA_TIPO(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -470,11 +477,11 @@ void DECLARA_VARIAVEIS(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -488,11 +495,11 @@ void DECLARA_IDENTIFICADOR(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -516,11 +523,11 @@ void VETOR_MATRIZ(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -534,11 +541,11 @@ void DIMENSAO(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -569,11 +576,11 @@ void TIPO_BASICO(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -591,11 +598,11 @@ void BLOCO_COMANDOS(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -628,7 +635,7 @@ void LISTA_COMANDOS(TokenInfo *vetor) {
         break;
         default:
             if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -668,11 +675,11 @@ void COMANDOS(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -730,11 +737,11 @@ void EXPRESSAO(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -779,11 +786,11 @@ void EXPRESSAO_SIMPLES(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -826,11 +833,11 @@ void TERMO(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));//se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao);//se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -886,11 +893,11 @@ void FATOR(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -911,11 +918,11 @@ void VARIAVEL(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -939,11 +946,11 @@ void EXPRITER(TokenInfo *vetor) {
         default:
             if (token_posicao > local) {
                 if (!erro_sintatico) {
-                    printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token)); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
+                    imprimir_erro_sintatico(vetor, token_posicao); //se a cadeia for encerrada de maneira incompleta, esta mensagem eh impressa
                     erro_sintatico = 1;
                 }
             } else if (!erro_sintatico) {
-                printf("ERRO DE SINTAXE. Linha: %d Coluna: %d -> '%s'", vetor[token_posicao].linha, vetor[token_posicao].coluna, tokenTypeToString(vetor[token_posicao].token));
+                imprimir_erro_sintatico(vetor, token_posicao);
                 erro_sintatico = 1;
             }
             break;
@@ -970,7 +977,7 @@ int main() {
     primeira_linha = 1;
     int erro_lexico;
     int linha = 0;
-
+    int i, j;
     //Alocacao dinamica para o vetor de inteiros
     int vetor_capacidade = 300;
     TokenInfo *vetor = (TokenInfo *)malloc(vetor_capacidade * sizeof(TokenInfo));
@@ -985,13 +992,13 @@ int main() {
         erro_sintatico = 0;
         erro_lexico = 0;
         
-        
-        
-        int i = 0;
+        i = 0;
+
 
         // ===== ANALISADOR LEXICO =====
         //Aqui a cadeia lida eh Tokenizada
         while (string[i] != '\0' && string[i] != '\n') {
+            j = 0;
             if(strncasecmp(&string[i], "algoritmo", 9) == 0) {
                 //printf("algoritmo\n");
                 i += 9;
@@ -1206,13 +1213,13 @@ int main() {
                //printf("se\n");
                i += 2;
             }else if ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= 'A' && string[i] <= 'Z')||(string[i]=='_')) {//[a-zA-Z_][a-zA-Z0-9_]*
-                //printf("\n\n%d ", i);
-                //printf("Processando token: %d na linha: %d, coluna: %d\n", ALGORITMO, linha, i+1);
-                armazenar_token(vetor, IDENTIFICADOR, linha, (i+1));
-                //printf("\nteste LEXICO. Linha: %d Coluna: %d -> '%c'", vetor[posicao].linha, vetor[posicao].coluna, vetor[posicao].token);
+                //printf("\n%c", string[i]);
                 while ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= 'A' && string[i] <= 'Z')||(string[i]=='_')||(string[i] >= '0' && string[i] <= '9')) {
+                    vetor[local].palavra[j] = string[i]; //aqui armazeno o identificador para ser impresso em um possivel erro sintatico
+                    j++;
                     i++;
                 }
+                armazenar_token(vetor, IDENTIFICADOR, linha, (i));
                // printf("Identificador\n");
             }else if(string[i] >= '0' && string[i] <= '9'){//[0-9]+
                 armazenar_token(vetor, NUMERO_INTEIRO, linha, (i+1));
@@ -1235,13 +1242,13 @@ int main() {
                 if(string[i]=='"'){
                     //printf("string\n");
                 }else{
-                    //printf("ERRO LEXICO: %c", string[i]);
+                    printf("ERRO LEXICO. Linha: %d Coluna: %d -> '%c'", linha, i+1, string[i]);
                     return 0;
                 }
                 i++; //precisa desse i++ para não detectar o fechamento da string como uma nova string
                 armazenar_token(vetor, STRING, linha, (i+1));
             }else if (string[i] == '{') {  // Reconhecimento de comentário em bloco
-                i++;  // Avança para o próximo caractere depois de '{'
+                i++;  // Avanca para o proximo caractere depois de '{'
 
                 while (1) {  // Loop infinito até encontrar o '}' que fecha o comentário
                     // Se chegar ao final da string atual, ler uma nova linha
@@ -1265,10 +1272,6 @@ int main() {
                 }
                 //armazenar_token(vetor, COMENTARIO_EM_BLOCO, linha, (i+1));
             }else {
-                for(int i=0; i<=10; i++){
-        //printf("ERRO LEXICO. Linha: %d Coluna: %d -> '%c'", vetor[i].linha, vetor[i].coluna, vetor[i].token);
-
-    }
                 printf("ERRO LEXICO. Linha: %d Coluna: %d -> '%c'", linha, i+1, string[i]);
                 erro_lexico = 1;
                 return 0; 
@@ -1277,7 +1280,6 @@ int main() {
             // ===== FIM ANALISADOR LEXICO
             
             //Se necessario, Aqui eh aumentada a capacidade do vetor
-            //printf("tamanho %d %d", posicao, vetor_capacidade);
             if (local >= vetor_capacidade) {
                 vetor_capacidade *= 2; // Dobre a capacidade
                 TokenInfo *temp = realloc(vetor, vetor_capacidade * sizeof(TokenInfo));
@@ -1290,14 +1292,6 @@ int main() {
             }
             
         }
-
-        //local = posicao - 1;
-
-        
-        
-        
-        //Liberar memoria alocada para o vetor de inteiros
-        //free(vetor);
     }
     if(!erro_lexico){
             PROGRAMA(vetor); //Chama o analisador sintatico
