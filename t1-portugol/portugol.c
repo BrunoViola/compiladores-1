@@ -70,7 +70,7 @@ typedef struct {
     char palavra[300];
 } TokenInfo;
 
-//Funcao utilziada para converter o valor do enum em uma string
+//Funcao utilizada para converter o valor do enum em uma string
 const char* tokenTypeToString(TokenType token) {
     switch (token) {
         case ALGORITMO: return "algoritmo";
@@ -642,7 +642,6 @@ void LISTA_COMANDOS(TokenInfo *vetor) {
     }
 }
 
-
 void LISTA_COMANDOS_X(TokenInfo *vetor) {
     switch (vetor[token_posicao].token) {
         case COMENTARIO_EM_BLOCO:
@@ -1000,190 +999,143 @@ int main() {
         while (string[i] != '\0' && string[i] != '\n') {
             j = 0;
             if(strncasecmp(&string[i], "algoritmo", 9) == 0) {
-                //printf("algoritmo\n");
                 i += 9;
                 armazenar_token(vetor, ALGORITMO, linha, (i+1));
-                //printf("ERRO LEXICO. Linha: %d Coluna: %d -> '%d'", vetor[posicao].linha, vetor[posicao].coluna, vetor[posicao].token);
             }else if (strncasecmp(&string[i], "inicio", 6) == 0) {
                 
                 armazenar_token(vetor, INICIO, linha, (i+1));
-                //printf("inicio\n");
                 i += 6;
             }else if (strncasecmp(&string[i], "fim", 3) == 0) {
                 armazenar_token(vetor, FIM, linha, (i+1));
-                //printf("fim\n");
                 i += 3;
             }else if (strncasecmp(&string[i], "variaveis", 9) == 0) {
                 armazenar_token(vetor, VARIAVEIS, linha, (i+1));
-                //printf("variaveis\n");
                 i += 9;
             }else if (strncasecmp(&string[i], "inteiro", 7) == 0) {
                 armazenar_token(vetor, INTEIRO, linha, (i+1));
-                //printf("inteiro\n");
                 i += 7;
             }else if (strncasecmp(&string[i], "real", 4) == 0) {
                 armazenar_token(vetor, REAL, linha, (i+1));
-                //printf("real\n");
                 i += 4;
             }else if (strncasecmp(&string[i], "caractere", 9) == 0) {
                 armazenar_token(vetor, CARACTERE, linha, (i+1));
-                //printf("caractere\n");
                 i += 9;
             }else if (strncasecmp(&string[i], "logico", 6) == 0) {
                 armazenar_token(vetor, LOGICO, linha, (i+1));
-                //printf("logico\n");
                 i += 6;
             }else if (strncasecmp(&string[i], "tipo", 4) == 0) {
                 armazenar_token(vetor, TIPO, linha, (i+1));
-                //printf("tipo\n");
                 i += 4;
             }else if (strncasecmp(&string[i], "funcao", 6) == 0) {
                armazenar_token(vetor, FUNCAO, linha, (i+1));
-               //printf("funcao\n");
                i += 6;
             } else if (strncasecmp(&string[i], "procedimento", 12) == 0) {
                armazenar_token(vetor, PROCEDIMENTO, linha, (i+1));
-               //printf("procedimento\n");
                i += 12;
             }  else if (strncasecmp(&string[i], "entao", 5) == 0) {
                armazenar_token(vetor, ENTAO, linha, (i+1));
-               //printf("entao\n");
                i += 5;
             } else if (strncasecmp(&string[i], "senao", 5) == 0) {
                armazenar_token(vetor, SENAO, linha, (i+1));
-               //printf("senao\n");
                i += 5;
             } else if (strncasecmp(&string[i], "enquanto", 8) == 0) {
                armazenar_token(vetor, ENQUANTO, linha, (i+1));
-               //printf("enquanto\n");
                i += 8;
             } else if (strncasecmp(&string[i], "faca", 4) == 0) {
                armazenar_token(vetor, FACA, linha, (i+1));
-               //printf("faca\n");
                i += 4;
             } else if (strncasecmp(&string[i], "para", 4) == 0) {
                armazenar_token(vetor, PARA, linha, (i+1));
-               //printf("para\n");
                i += 4;
             } else if (strncasecmp(&string[i], "de", 2) == 0) {
                armazenar_token(vetor, DE, linha, (i+1));
-               //printf("de\n");
                i += 2;
             } else if (strncasecmp(&string[i], "ate", 3) == 0) {
                armazenar_token(vetor, ATE, linha, (i+1));
-               //printf("ate\n");
                i += 3;
             } else if (strncasecmp(&string[i], "passo", 5) == 0) {
                armazenar_token(vetor, PASSO, linha, (i+1));
-               //printf("passo\n");
                i += 5;
             } else if (strncasecmp(&string[i], "repita", 6) == 0) {
                armazenar_token(vetor, REPITA, linha, (i+1));
-               //printf("repita\n");
                i += 6;
             } else if (strncasecmp(&string[i], "leia", 4) == 0) {
                armazenar_token(vetor, LEIA, linha, (i+1));
-               //printf("leia\n");
                i += 4;
             } else if (strncasecmp(&string[i], "imprima", 7) == 0) {
                armazenar_token(vetor, IMPRIMA, linha, (i+1));
-               //printf("imprima\n");
                i += 7;
             } else if (strncasecmp(&string[i], "verdadeiro", 10) == 0) {
                armazenar_token(vetor, VERDADEIRO, linha, (i+1));
-               //printf("verdadeiro\n");
                i += 10;
             } else if (strncasecmp(&string[i], "falso", 5) == 0) {
                armazenar_token(vetor, FALSO, linha, (i+1));
-               //printf("falso\n");
                i += 5;
             } else if (strncasecmp(&string[i], "e", 1) == 0) {
                armazenar_token(vetor, E, linha, (i+1));
-               //printf("e\n");
                i += 1;
             } else if (strncasecmp(&string[i], "ou", 2) == 0) {
                armazenar_token(vetor, OU, linha, (i+1));
-               //printf("ou\n");
                i += 2;
             } else if (strncasecmp(&string[i], "nao", 3) == 0) {
                armazenar_token(vetor, NAO, linha, (i+1));
-               //printf("nao\n");
                i += 3;
             } else if (strncasecmp(&string[i], "div", 3) == 0) {
                armazenar_token(vetor, DIV, linha, (i+1));
-               //printf("div\n");
                i += 3;
             }  else if (strncasecmp(&string[i], ";", 1) == 0) {
                armazenar_token(vetor, PONTO_VIRGULA, linha, (i+1));
-               //printf(";\n");
                i += 1;
             } else if (strncasecmp(&string[i], ",", 1) == 0) {
                armazenar_token(vetor, VIRGULA, linha, (i+1));
-               //printf(",\n");
                i += 1;
             } else if (strncasecmp(&string[i], ":", 1) == 0) {
                armazenar_token(vetor, DOIS_PONTOS, linha, (i+1));
-               //printf(":\n");
                i += 1;
             } else if (strncasecmp(&string[i], ".", 1) == 0) {
                armazenar_token(vetor, PONTO, linha, (i+1));
-               //printf(".\n");
                i += 1;
             } else if (strncasecmp(&string[i], "[", 1) == 0) {
                armazenar_token(vetor, ABRE_COLCHETE, linha, (i+1));
-               //printf("[\n");
                i += 1;
             } else if (strncasecmp(&string[i], "]", 1) == 0) {
                armazenar_token(vetor, FECHA_COLCHETE, linha, (i+1));
-               //printf("]\n");
                i += 1;
             } else if (strncasecmp(&string[i], "(", 1) == 0) {
                armazenar_token(vetor, ABRE_PARENTESE, linha, (i+1));
-               //printf("(\n");
                i += 1;
             } else if (strncasecmp(&string[i], ")", 1) == 0) {
                armazenar_token(vetor, FECHA_PARENTESE, linha, (i+1));
-               //printf(")\n");
                i += 1;
             } else if (strncasecmp(&string[i], "=", 1) == 0) {
                armazenar_token(vetor, IGUAL, linha, (i+1));
-               //printf("=\n");
                i += 1;
             } else if (strncasecmp(&string[i], "<>", 2) == 0) {
                armazenar_token(vetor, DIFERENTE, linha, (i+1));
-               //printf("<>\n");
                i += 2;
             } else if (strncasecmp(&string[i], ">=", 2) == 0) {
                armazenar_token(vetor, MAIOR_IGUAL, linha, (i+1));
-               //printf(">=\n");
                i += 2;
             } else if (strncasecmp(&string[i], "<=", 2) == 0) {
                armazenar_token(vetor, MENOR_IGUAL, linha, (i+1));
-               //printf("<=\n");
                i += 2;
             } else if (strncasecmp(&string[i], "<-", 2) == 0) {
                armazenar_token(vetor, ATRIBUICAO_ESQUERDA, linha, (i+1));
-               //printf("<-\n");
                i += 2;
             } else if (strncasecmp(&string[i], ">", 1) == 0) {
                armazenar_token(vetor, MAIOR, linha, (i+1));
-               //printf(">\n");
                i += 1;
             } else if (strncasecmp(&string[i], "<", 1) == 0) {
                armazenar_token(vetor, MENOR, linha, (i+1));
-               //printf("<\n");
                i += 1;
             } else if (strncasecmp(&string[i], "+", 1) == 0) {
                armazenar_token(vetor, MAIS, linha, (i+1));
-               //printf("+\n");
                i += 1;
             } else if (strncasecmp(&string[i], "-", 1) == 0) {
                armazenar_token(vetor, MENOS, linha, (i+1));
-               //printf("-\n");
                i += 1;
             } else if (strncasecmp(&string[i], "*", 1) == 0) {
                armazenar_token(vetor, MULTIPLICACAO, linha, (i+1));
-              // printf("*\n");
                i += 1;
             }else if(string[i]=='/' && string[i+1]=='/'){// reconhecimento de comentarios de linha
                 i+=1; //add dois por conta das duas barras
@@ -1191,29 +1143,22 @@ int main() {
                 while (string[i] != '\n') {
                     i++;
                 }
-                //printf("comentario em linha\n");
                 i++;
-                
             } else if (strncasecmp(&string[i], "/", 1) == 0) { // o reconhecimento da divisao deve ser abaixo do comentario de linha por questoes de precedencia
                armazenar_token(vetor, DIVISAO, linha, (i+1));
-               //printf("/\n");
                i += 1;
             }else if((strncmp(&string[i], " ", 1) == 0)||(strncmp(&string[i], "\n", 1) == 0)||(strncmp(&string[i], "\r", 1) == 0)||(strncmp(&string[i], "\0", 1) == 0)){
                 i++; //Para ignorar espacos e quebra de linha
             } else if ((strncasecmp(&string[i], "matriz", 6) == 0) && (string[i+6]=='[')) {
                 armazenar_token(vetor, MATRIZ, linha, (i+1));
-                //printf("matriz\n");
                 i += 6;
             } else if ((strncasecmp(&string[i], "vetor", 5) == 0) && (string[i+5]=='[')) {
                 armazenar_token(vetor, VETOR, linha, (i+1));
-                //printf("vetor\n");
                 i += 5;
             } else if ((strncasecmp(&string[i], "se", 2) == 0) && (string[i+2]==' ' || string[i+2]==';'||string[i+2]=='(')) {
                armazenar_token(vetor, SE, linha, (i+1));
-               //printf("se\n");
                i += 2;
             }else if ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= 'A' && string[i] <= 'Z')||(string[i]=='_')) {//[a-zA-Z_][a-zA-Z0-9_]*
-                //printf("\n%c", string[i]);
                 while ((string[i] >= 'a' && string[i] <= 'z')||(string[i] >= 'A' && string[i] <= 'Z')||(string[i]=='_')||(string[i] >= '0' && string[i] <= '9')) {
                     vetor[local].palavra[j] = string[i]; //aqui armazeno o identificador para ser impresso em um possivel erro sintatico
                     j++;
@@ -1264,7 +1209,7 @@ int main() {
                         i++;  // Avança após '}'
                         break;  // Sai do loop, comentário fechado
                     }
-                    // Avança para o próximo caractere
+                    // Avanca para o proximo caractere
                     i++;
                     if(string[i]=='\0'){ //isso aqui é para caso um comentario em bloco nao tenha sido finalizado corretamente
                         return 0;
